@@ -121,18 +121,18 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
 
         {/* Footer Trust Signals */}
         <div className="mt-10 pt-6 border-t border-gray-700/50 w-full">
-            <div className="flex justify-between items-center text-[10px] text-gray-400 font-mono mb-4">
+            <div className="flex justify-between items-center text-xs text-gray-300 font-mono mb-4">
                 <div className="flex items-center gap-1.5">
-                    <CheckCircle size={12} className="text-success" /> SOC2 Encrypted
+                    <CheckCircle size={14} className="text-success" /> SOC2 Encrypted
                 </div>
                 <div className="flex items-center gap-1.5">
-                    <CheckCircle size={12} className="text-success" /> ISO 27001 Verified
+                    <CheckCircle size={14} className="text-success" /> ISO 27001 Verified
                 </div>
                 <div className="flex items-center gap-1.5">
-                    <Lock size={12} className="text-success" /> 256-bit SSL
+                    <Lock size={14} className="text-success" /> 256-bit SSL
                 </div>
             </div>
-            <p className="text-center text-[10px] text-gray-500 uppercase tracking-widest">
+            <p className="text-center text-[11px] text-gray-400 uppercase tracking-widest leading-relaxed">
                 Authorized Personnel Only. All access attempts are logged on the immutable ledger.
             </p>
         </div>
