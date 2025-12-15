@@ -5,22 +5,14 @@ import { UploadSpecs } from './components/UploadSpecs';
 import { ResultsView } from './components/ResultsView';
 import { CommitmentView } from './components/CommitmentView';
 import { SuccessView } from './components/SuccessView';
+// Import New Dashboard Views
+import { WalletView, AnalyticsView, OrdersView, SuppliersView, SettingsView } from './components/DashboardViews';
+// Import Info/Footer Views
+import { SecurityView, Web3PolicyView, PrivacyView, TermsView, HelpCenterView, SupportView } from './components/InfoViews';
+
 import { AppScreen, Material } from './types';
 import { MOCK_MATERIALS } from './constants';
-import { MessageCircle, Shield, FileText, HelpCircle, Lock, Construction } from 'lucide-react';
-
-// Placeholder Component for incomplete screens
-const PlaceholderView: React.FC<{ title: string }> = ({ title }) => (
-  <div className="flex flex-col items-center justify-center h-[70vh] animate-fade-in text-center border-2 border-dashed border-gray-200 rounded-lg bg-white/50">
-    <div className="bg-gray-100 p-6 rounded-full mb-6">
-       <Construction className="text-gray-400 w-12 h-12" />
-    </div>
-    <h2 className="text-3xl font-serif text-primary mb-2">{title}</h2>
-    <p className="text-gray-500 max-w-md">
-      This module is currently under development. Please check back later for full access to {title.toLowerCase()} features.
-    </p>
-  </div>
-);
+import { MessageCircle, Shield, FileText, HelpCircle, Lock } from 'lucide-react';
 
 const App: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(AppScreen.DASHBOARD);
@@ -46,6 +38,7 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (currentScreen) {
+      // Main Flows
       case AppScreen.DASHBOARD:
         return <Dashboard onNavigate={handleNavigate} />;
       case AppScreen.UPLOAD_SPECS:
@@ -62,17 +55,33 @@ const App: React.FC = () => {
         ) : <Dashboard onNavigate={handleNavigate} />;
       case AppScreen.SUCCESS:
         return <SuccessView onReturn={handleNavigate} />;
-      // New Routes
+      
+      // Secondary Dashboard Views
       case AppScreen.ORDERS:
-        return <PlaceholderView title="Orders Management" />;
+        return <OrdersView />;
       case AppScreen.WALLET:
-        return <PlaceholderView title="Digital Wallet" />;
+        return <WalletView />;
       case AppScreen.ANALYTICS:
-        return <PlaceholderView title="Advanced Analytics" />;
+        return <AnalyticsView />;
       case AppScreen.SUPPLIERS:
-        return <PlaceholderView title="Vetted Suppliers" />;
+        return <SuppliersView />;
       case AppScreen.SETTINGS:
-        return <PlaceholderView title="System Settings" />;
+        return <SettingsView />;
+      
+      // Footer / Info Pages
+      case AppScreen.SECURITY_POLICY:
+        return <SecurityView />;
+      case AppScreen.WEB3_POLICY:
+        return <Web3PolicyView />;
+      case AppScreen.PRIVACY_POLICY:
+        return <PrivacyView />;
+      case AppScreen.TERMS_SERVICE:
+        return <TermsView />;
+      case AppScreen.HELP_CENTER:
+        return <HelpCenterView />;
+      case AppScreen.CONTACT_SUPPORT:
+        return <SupportView />;
+        
       default:
         return <Dashboard onNavigate={handleNavigate} />;
     }
@@ -88,7 +97,7 @@ const App: React.FC = () => {
           </div>
         </div>
         
-        {/* Main Application Footer - Enhanced Visibility */}
+        {/* Main Application Footer - Enhanced Visibility & Interactivity */}
         <footer className="bg-white border-t border-gray-200 py-10 px-12 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] relative z-10">
           <div className="max-w-7xl mx-auto">
             
@@ -99,29 +108,32 @@ const App: React.FC = () => {
                <div className="flex flex-col gap-3">
                   <span className="font-serif text-primary font-semibold text-lg">© 2025 Classic Homes Marketplace</span>
                   <div className="flex flex-wrap gap-6 text-sm text-gray-600 font-medium">
-                    <a href="#" className="hover:text-accent transition-colors flex items-center gap-1.5 py-1">
+                    <button onClick={() => handleNavigate(AppScreen.SECURITY_POLICY)} className="hover:text-accent transition-colors flex items-center gap-1.5 py-1">
                       <Shield size={14} className="text-gray-400" /> Security Policy
-                    </a>
-                    <a href="#" className="hover:text-accent transition-colors flex items-center gap-1.5 py-1">
+                    </button>
+                    <button onClick={() => handleNavigate(AppScreen.WEB3_POLICY)} className="hover:text-accent transition-colors flex items-center gap-1.5 py-1">
                       <Lock size={14} className="text-gray-400" /> Web3 Provenance Policy
-                    </a>
+                    </button>
                     <span className="text-gray-300 hidden sm:inline self-center">|</span>
-                    <a href="#" className="hover:text-accent transition-colors py-1">Privacy</a>
-                    <a href="#" className="hover:text-accent transition-colors py-1">Terms</a>
+                    <button onClick={() => handleNavigate(AppScreen.PRIVACY_POLICY)} className="hover:text-accent transition-colors py-1">Privacy</button>
+                    <button onClick={() => handleNavigate(AppScreen.TERMS_SERVICE)} className="hover:text-accent transition-colors py-1">Terms</button>
                   </div>
                </div>
 
                {/* Right: Help & Context */}
                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 w-full xl:w-auto">
                   <div className="flex items-center gap-6 text-base text-gray-600 font-medium">
-                     <a href="#" className="hover:text-primary transition-colors flex items-center gap-2">
+                     <button onClick={() => handleNavigate(AppScreen.HELP_CENTER)} className="hover:text-primary transition-colors flex items-center gap-2">
                         <HelpCircle size={18} /> Help Center
-                     </a>
-                     <a href="#" className="hover:text-primary transition-colors">
+                     </button>
+                     <button onClick={() => handleNavigate(AppScreen.CONTACT_SUPPORT)} className="hover:text-primary transition-colors">
                         Contact Support
-                     </a>
+                     </button>
                   </div>
-                  <button className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg text-sm font-bold tracking-wide hover:bg-secondary transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto justify-center">
+                  <button 
+                    onClick={() => handleNavigate(AppScreen.CONTACT_SUPPORT)}
+                    className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg text-sm font-bold tracking-wide hover:bg-secondary transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto justify-center"
+                  >
                      <MessageCircle size={18} />
                      <span>Live Chat</span>
                   </button>
