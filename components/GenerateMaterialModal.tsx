@@ -24,7 +24,8 @@ export const GenerateMaterialModal: React.FC<GenerateMaterialModalProps> = ({ on
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
       // 1. Generate Image
-      const imagePrompt = `Close-up, high-fidelity, photorealistic architectural texture photography of ${name} (${type}). ${description}. Style: Luxury construction material sample, even lighting, sharp details, top-down view.`;
+      // Using gemini-2.5-flash-image for high fidelity texture generation
+      const imagePrompt = `Close-up, high-fidelity, photorealistic architectural texture photography of ${name} (${type}). ${description}. Style: Luxury construction material sample, even lighting, sharp details, top-down view, 8k resolution, seamless texture.`;
       
       const imagePromise = ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
@@ -32,17 +33,18 @@ export const GenerateMaterialModal: React.FC<GenerateMaterialModalProps> = ({ on
       });
 
       // 2. Generate Metadata
+      // Using gemini-2.5-flash for structured JSON data extraction based on the description
       const metadataPrompt = `Generate a JSON object for a luxury construction material.
       Name: ${name}
       Type: ${type}
       Description: ${description}
       
       Fields required:
-      - origin: string (City, Country)
-      - pricePerSqFt: number (integer between 100 and 600)
+      - origin: string (Specific City, Country known for this material)
+      - pricePerSqFt: number (integer between 100 and 800)
       - leadTimeWeeks: number (integer between 4 and 24)
-      - supplier: string (Sophisticated company name)
-      - matchScore: number (integer between 85 and 99)
+      - supplier: string (Sophisticated, fictional luxury supplier name)
+      - matchScore: number (integer between 88 and 99)
       
       Return strictly valid JSON.`;
 
@@ -115,8 +117,7 @@ export const GenerateMaterialModal: React.FC<GenerateMaterialModalProps> = ({ on
 
     } catch (error) {
       console.error("Error generating material:", error);
-      // Handle error (could add error state to UI)
-    } finally {
+      // In a real app, we would show a toast notification here
       setIsGenerating(false);
     }
   };
@@ -124,17 +125,20 @@ export const GenerateMaterialModal: React.FC<GenerateMaterialModalProps> = ({ on
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div 
-        className="absolute inset-0 bg-primary/40 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-primary/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       ></div>
       
       <div className="relative bg-surface rounded-lg shadow-2xl w-full max-w-lg overflow-hidden animate-fade-in border border-gray-100">
-        <div className="bg-primary p-6 text-white flex justify-between items-center">
-            <h3 className="font-serif text-xl flex items-center gap-2">
+        <div className="bg-primary p-6 text-white flex justify-between items-center relative overflow-hidden">
+            {/* Decorative glow */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+            
+            <h3 className="font-serif text-xl flex items-center gap-2 relative z-10">
                 <Sparkles className="text-accent" size={20} />
                 Generate Custom Material
             </h3>
-            <button onClick={onClose} className="text-white/70 hover:text-white">
+            <button onClick={onClose} className="text-white/70 hover:text-white relative z-10">
                 <X size={20} />
             </button>
         </div>
@@ -142,11 +146,11 @@ export const GenerateMaterialModal: React.FC<GenerateMaterialModalProps> = ({ on
         <div className="p-6 space-y-6">
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                    <Tag size={16} /> Material Name
+                    <Tag size={16} className="text-gray-400" /> Material Name
                 </label>
                 <input 
                     type="text" 
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-1 focus:ring-accent focus:border-accent outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded focus:ring-1 focus:ring-accent focus:border-accent outline-none transition-shadow"
                     placeholder="e.g. Noir Saint Laurent Marble"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -155,10 +159,10 @@ export const GenerateMaterialModal: React.FC<GenerateMaterialModalProps> = ({ on
 
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                    <TypeIcon size={16} /> Category
+                    <TypeIcon size={16} className="text-gray-400" /> Category
                 </label>
                 <select 
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-1 focus:ring-accent focus:border-accent outline-none bg-white"
+                    className="w-full px-4 py-3 border border-gray-300 rounded focus:ring-1 focus:ring-accent focus:border-accent outline-none bg-white transition-shadow"
                     value={type}
                     onChange={(e) => setType(e.target.value)}
                 >
@@ -172,31 +176,33 @@ export const GenerateMaterialModal: React.FC<GenerateMaterialModalProps> = ({ on
 
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                    <ImageIcon size={16} /> Visual Description (AI Prompt)
+                    <ImageIcon size={16} className="text-gray-400" /> Visual Description (AI Prompt)
                 </label>
                 <textarea 
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-1 focus:ring-accent focus:border-accent outline-none h-32 resize-none"
-                    placeholder="Describe the texture, colors, patterns, and finish..."
+                    className="w-full px-4 py-3 border border-gray-300 rounded focus:ring-1 focus:ring-accent focus:border-accent outline-none h-32 resize-none transition-shadow"
+                    placeholder="Describe the texture, colors, veining patterns, surface finish (honed, polished), and any unique characteristics..."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
-                <p className="text-xs text-gray-400 mt-2">The AI will generate a photorealistic texture and estimate technical specifications based on this description.</p>
+                <p className="text-xs text-gray-400 mt-2">Our AI will generate a photorealistic texture and estimate technical specifications based on this description.</p>
             </div>
             
-            <div className="flex gap-3 pt-2">
+            <div className="flex gap-3 pt-4 border-t border-gray-100">
                 <Button variant="outline" className="flex-1" onClick={onClose} disabled={isGenerating}>Cancel</Button>
                 <Button 
                     variant="primary" 
-                    className="flex-1" 
+                    className="flex-1 shadow-lg" 
                     onClick={handleGenerate}
                     disabled={!name || !description || isGenerating}
                 >
                     {isGenerating ? (
                         <>
-                            <Loader2 className="animate-spin mr-2" size={18} /> Generating...
+                            <Loader2 className="animate-spin mr-2" size={18} /> Synthesizing...
                         </>
                     ) : (
-                        "Generate Material"
+                        <span className="flex items-center gap-2">
+                            <Sparkles size={16} /> Generate Material
+                        </span>
                     )}
                 </Button>
             </div>

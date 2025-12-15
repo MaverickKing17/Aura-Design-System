@@ -92,6 +92,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
   };
 
   const handleNewMaterial = (newMaterial: Material) => {
+    // Add the new material to the beginning of the list
     setMaterials(prev => [newMaterial, ...prev]);
   };
 
@@ -140,9 +141,11 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {sortedMaterials.map((material, idx) => {
           const isGenerating = generatingIds.has(material.id);
+          const isGenerated = material.id.startsWith('gen-');
 
           return (
-            <div key={material.id} className="bg-surface shadow-luxury flex flex-col h-full border border-gray-100 group transition-all duration-300 hover:-translate-y-1">
+            <div key={material.id} className="bg-surface shadow-luxury flex flex-col h-full border border-gray-100 group transition-all duration-300 hover:-translate-y-1 relative">
+              
               {/* Image Area */}
               <div className="relative h-56 bg-gray-200 overflow-hidden group-hover:shadow-inner">
                  <img 
@@ -158,32 +161,43 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
                    </div>
                  </div>
 
-                 {/* AI Gen Button */}
-                 <div className="absolute top-4 left-4 z-10">
-                    <button
-                      onClick={(e) => handleGenerateImage(material, e)}
-                      disabled={isGenerating}
-                      className={`
-                        flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg backdrop-blur-md transition-all duration-300
-                        ${isGenerating 
-                          ? 'bg-accent/80 text-primary cursor-wait' 
-                          : 'bg-white/20 text-white border border-white/30 hover:bg-accent hover:text-primary hover:border-accent'
-                        }
-                      `}
-                    >
-                      {isGenerating ? (
-                        <>
-                          <Loader2 size={12} className="animate-spin" />
-                          Enhancing...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles size={12} />
-                          AI Enhance
-                        </>
-                      )}
-                    </button>
-                 </div>
+                 {/* AI Gen Button (Only for existing materials or if you want to re-gen) */}
+                 {!isGenerated && (
+                   <div className="absolute top-4 left-4 z-10">
+                      <button
+                        onClick={(e) => handleGenerateImage(material, e)}
+                        disabled={isGenerating}
+                        className={`
+                          flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg backdrop-blur-md transition-all duration-300
+                          ${isGenerating 
+                            ? 'bg-accent/80 text-primary cursor-wait' 
+                            : 'bg-white/20 text-white border border-white/30 hover:bg-accent hover:text-primary hover:border-accent'
+                          }
+                        `}
+                      >
+                        {isGenerating ? (
+                          <>
+                            <Loader2 size={12} className="animate-spin" />
+                            Enhancing...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles size={12} />
+                            AI Enhance
+                          </>
+                        )}
+                      </button>
+                   </div>
+                 )}
+
+                 {/* Generated Badge */}
+                 {isGenerated && (
+                    <div className="absolute top-4 left-4 z-10">
+                        <span className="bg-accent text-primary px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-1">
+                            <Sparkles size={12} /> Custom Gen
+                        </span>
+                    </div>
+                 )}
 
                  {material.verified && (
                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-12">
