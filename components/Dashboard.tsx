@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { AppScreen } from '../types';
 import { MOCK_PROJECTS, SUPPLY_RISK_DATA } from '../constants';
 import { Button } from './Button';
-import { Plus, TrendingUp, TrendingDown, ArrowUpRight, ShieldCheck, Clock, MapPin, AlertTriangle, Globe, Activity } from 'lucide-react';
+import { Plus, TrendingUp, TrendingDown, ArrowUpRight, ShieldCheck, Clock, MapPin, AlertTriangle, Globe, Activity, ChevronRight, BarChart3 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip, LineChart, Line, CartesianGrid, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from 'recharts';
 
 interface DashboardProps {
@@ -26,6 +26,34 @@ const volumeData = [
   { month: 'Aug', value: 3.2 },
   { month: 'Sep', value: 3.8 },
   { month: 'Oct', value: 4.2 },
+];
+
+// Specific Risk Metrics for the detailed view
+const REGIONAL_RISK_METRICS = [
+  {
+    location: "Tuscany, Italy",
+    subtext: "Logistics: Secure",
+    metricLabel: "Material Supply Certainty",
+    metricValue: "98.7%",
+    statusColor: "text-success",
+    flag: "🇮🇹"
+  },
+  {
+    location: "São Paulo, Brazil",
+    subtext: "Delay Risk: +2 Wks",
+    metricLabel: "Force Majeure Risk Rating",
+    metricValue: "HIGH",
+    statusColor: "text-error",
+    flag: "🇧🇷"
+  },
+  {
+    location: "Vermont, USA",
+    subtext: "Production: On Track",
+    metricLabel: "Token Provenance Integrity",
+    metricValue: "100%",
+    statusColor: "text-success",
+    flag: "🇺🇸"
+  }
 ];
 
 export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
@@ -69,10 +97,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       </div>
 
       {/* KPI Cards - The "Money View" */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Expanded Grid to 4 columns to accommodate wider Risk Radar */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         
         {/* Card 1: Total Spend */}
-        <div className="bg-surface p-0 shadow-luxury border border-tertiary relative overflow-hidden group">
+        <div className="bg-surface p-0 shadow-luxury border border-tertiary relative overflow-hidden group col-span-1">
           <div className="p-6 pb-2">
             <div className="flex justify-between items-start mb-2">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Total Procurement Spend</h3>
@@ -100,7 +129,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         </div>
 
         {/* Card 2: Tokenized Volume */}
-        <div className="bg-surface p-0 shadow-luxury border border-tertiary relative overflow-hidden group">
+        <div className="bg-surface p-0 shadow-luxury border border-tertiary relative overflow-hidden group col-span-1">
           <div className="p-6 pb-2">
             <div className="flex justify-between items-start mb-2">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Tokenized Volume</h3>
@@ -127,69 +156,83 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* Card 3: Global Supply Risk Radar */}
-        <div className="bg-surface p-6 shadow-luxury border border-tertiary relative flex flex-col">
-           <div className="flex justify-between items-start mb-4">
-              <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Global Supply Risk Radar</h3>
-              <Activity className="text-gray-300" size={16} />
+        {/* Card 3: Global Supply Risk Radar (Expanded) */}
+        <div className="bg-surface p-0 shadow-luxury border border-tertiary relative flex flex-col md:col-span-2">
+           <div className="p-6 border-b border-gray-100 flex justify-between items-start">
+              <div className="flex items-center gap-2">
+                 <Activity className="text-accent" size={18} />
+                 <h3 className="text-sm font-bold text-primary uppercase tracking-widest">Global Supply Risk Radar</h3>
+              </div>
+              <span className="text-[10px] font-mono text-gray-400 flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> LIVE MONITORING
+              </span>
            </div>
            
-           {/* Radar Chart */}
-           <div className="h-40 w-full relative mb-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={SUPPLY_RISK_DATA.risk_radar_data}>
-                  <PolarGrid stroke="#e5e7eb" />
-                  <PolarAngleAxis dataKey="material" tick={{ fontSize: 9, fill: '#6b7280' }} />
-                  <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                  <Radar
-                    name="Volatility"
-                    dataKey="supply_volatility_score"
-                    stroke="#D4AF37"
-                    strokeWidth={2}
-                    fill="#D4AF37"
-                    fillOpacity={0.3}
-                  />
-                  <Radar
-                    name="Geo-Risk"
-                    dataKey="geopolitical_risk_score"
-                    stroke="#1A2A44"
-                    strokeWidth={1}
-                    fill="#1A2A44"
-                    fillOpacity={0.1}
-                  />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #f0f0f0', fontSize: '12px' }}
-                  />
-                </RadarChart>
-              </ResponsiveContainer>
-           </div>
+           <div className="flex flex-col sm:flex-row h-full">
+               {/* Radar Chart Section */}
+               <div className="w-full sm:w-5/12 h-48 sm:h-auto relative border-b sm:border-b-0 sm:border-r border-gray-100 bg-gray-50/30">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart cx="50%" cy="50%" outerRadius="65%" data={SUPPLY_RISK_DATA.risk_radar_data}>
+                      <PolarGrid stroke="#e5e7eb" />
+                      <PolarAngleAxis dataKey="material" tick={{ fontSize: 9, fill: '#6b7280' }} />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                      <Radar
+                        name="Volatility"
+                        dataKey="supply_volatility_score"
+                        stroke="#D4AF37"
+                        strokeWidth={2}
+                        fill="#D4AF37"
+                        fillOpacity={0.3}
+                      />
+                      <Radar
+                        name="Geo-Risk"
+                        dataKey="geopolitical_risk_score"
+                        stroke="#1A2A44"
+                        strokeWidth={1}
+                        fill="#1A2A44"
+                        fillOpacity={0.1}
+                      />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: '#fff', border: '1px solid #f0f0f0', fontSize: '12px' }}
+                      />
+                    </RadarChart>
+                  </ResponsiveContainer>
+               </div>
 
-           {/* Risk List Component */}
-           <div className="flex-1 overflow-y-auto pr-1 space-y-2 custom-scrollbar max-h-40">
-              {SUPPLY_RISK_DATA.risk_radar_data.map((item, index) => (
-                <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-100 hover:bg-gray-100 transition-colors">
-                  <div className="flex flex-col">
-                    <span className="text-xs font-bold text-primary">{item.material}</span>
-                    <span className="text-[10px] text-gray-500">{item.lead_time_days} days lead</span>
+               {/* Detailed Metrics List Section */}
+               <div className="w-full sm:w-7/12 flex flex-col">
+                  <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+                      {REGIONAL_RISK_METRICS.map((item, index) => (
+                        <div key={index} className="flex items-start gap-3 p-3 rounded-lg border border-gray-100 bg-white hover:shadow-md transition-shadow">
+                            <div className="text-xl pt-0.5 grayscale hover:grayscale-0 transition-all cursor-default" title={item.location}>{item.flag}</div>
+                            <div className="flex-1">
+                                <div className="flex justify-between items-center mb-1">
+                                    <span className="text-sm font-serif font-bold text-primary">{item.location}</span>
+                                    <span className={`text-[10px] font-bold uppercase tracking-wide ${item.statusColor.includes('error') ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'} px-2 py-0.5 rounded`}>
+                                        {item.subtext.split(':')[1]}
+                                    </span>
+                                </div>
+                                <div className="text-[10px] text-gray-500 mb-2">{item.subtext.split(':')[0]}</div>
+                                <div className="flex justify-between items-center pt-2 border-t border-gray-50">
+                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{item.metricLabel}</span>
+                                    <span className="font-mono text-xs font-bold text-primary">{item.metricValue}</span>
+                                </div>
+                            </div>
+                        </div>
+                      ))}
                   </div>
-                  <div className="flex items-center">
-                    <div 
-                      className={`w-2 h-2 rounded-full mr-2 ${
-                        item.supply_volatility_score > 70 ? 'bg-error animate-pulse' : 
-                        item.supply_volatility_score > 40 ? 'bg-accent' : 
-                        'bg-success'
-                      }`}
-                    ></div>
-                    <span className={`text-[10px] font-bold ${
-                         item.supply_volatility_score > 70 ? 'text-error' : 
-                         item.supply_volatility_score > 40 ? 'text-accent' : 
-                         'text-success'
-                      }`}>
-                       {item.supply_volatility_score}/100
-                    </span>
+                  
+                  {/* Action Button */}
+                  <div className="p-4 pt-2 bg-white border-t border-gray-100">
+                    <button 
+                        className="w-full bg-[#D4AF37] text-primary hover:bg-[#b6922e] hover:text-white transition-all duration-300 font-bold tracking-[0.15em] text-[10px] py-3 uppercase flex items-center justify-center gap-2 rounded-sm shadow-sm"
+                        onClick={() => onNavigate(AppScreen.ANALYTICS)}
+                    >
+                        <BarChart3 size={14} />
+                        Deep Dive: Risk & Provenance
+                    </button>
                   </div>
-                </div>
-              ))}
+               </div>
            </div>
         </div>
       </div>
