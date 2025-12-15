@@ -3,7 +3,7 @@ import {
   CreditCard, Wallet, TrendingUp, ArrowUpRight, ArrowDownLeft, 
   Package, Truck, CheckCircle2, AlertCircle, Search, Star, ShieldCheck, 
   User, Lock, Bell, Link as LinkIcon, BarChart3, Leaf, Factory, AlertTriangle, Activity,
-  Filter, MoreHorizontal, Clock, FileText, CheckCircle
+  Filter, MoreHorizontal, Clock, FileText, CheckCircle, Landmark, Coins
 } from 'lucide-react';
 import { Button } from './Button';
 import { 
@@ -14,9 +14,9 @@ import {
 // --- WALLET VIEW ---
 export const WalletView: React.FC = () => {
   const transactions = [
-    { id: 1, type: 'Payment', to: 'Tuscany Stoneworks', amount: '-$42,500.00', date: 'Today, 10:23 AM', status: 'Completed' },
-    { id: 2, type: 'Deposit', from: 'Sterling Main Account', amount: '+$150,000.00', date: 'Yesterday', status: 'Completed' },
-    { id: 3, type: 'Escrow', to: 'Apex Materials', amount: '-$12,450.00', date: 'Oct 24, 2025', status: 'Locked' },
+    { id: 1, type: 'Payment', to: 'Tuscany Stoneworks', amount: '-$42,500.00', date: 'Today, 10:23 AM', status: 'Completed', method: 'USDC' },
+    { id: 2, type: 'Deposit', from: 'Sterling Main Account', amount: '+$150,000.00', date: 'Yesterday', status: 'Completed', method: 'Wire' },
+    { id: 3, type: 'Escrow', to: 'Apex Materials', amount: '-$12,450.00', date: 'Oct 24, 2025', status: 'Locked', method: 'Smart Contract' },
   ];
 
   return (
@@ -45,23 +45,49 @@ export const WalletView: React.FC = () => {
            </div>
         </div>
 
-        {/* Quick Actions */}
+        {/* Quick Actions - Updated for Web3 Context */}
         <div className="grid grid-cols-2 gap-6">
            <button className="bg-surface border border-gray-200 p-6 rounded-xl hover:shadow-luxury hover:-translate-y-1 transition-all flex flex-col items-center justify-center gap-4 group">
               <div className="bg-green-50 p-5 rounded-full group-hover:bg-green-100 transition-colors border border-green-100">
                  <ArrowDownLeft className="text-success" size={28} />
               </div>
-              <span className="font-bold text-primary text-lg font-serif">Deposit Funds</span>
+              <span className="font-bold text-primary text-lg font-serif">Deposit Capital</span>
               <span className="text-xs text-gray-400 uppercase tracking-wider">Wire / ACH / Crypto</span>
            </button>
            <button className="bg-surface border border-gray-200 p-6 rounded-xl hover:shadow-luxury hover:-translate-y-1 transition-all flex flex-col items-center justify-center gap-4 group">
-              <div className="bg-blue-50 p-5 rounded-full group-hover:bg-blue-100 transition-colors border border-blue-100">
-                 <ArrowUpRight className="text-blue-600" size={28} />
+              <div className="bg-accent/10 p-5 rounded-full group-hover:bg-accent/20 transition-colors border border-accent/20">
+                 <ShieldCheck className="text-accent" size={28} />
               </div>
-              <span className="font-bold text-primary text-lg font-serif">Vendor Pay</span>
-              <span className="text-xs text-gray-400 uppercase tracking-wider">Escrow Release</span>
+              <span className="font-bold text-primary text-lg font-serif">Smart Contracts</span>
+              <span className="text-xs text-gray-400 uppercase tracking-wider">Manage Escrow</span>
            </button>
         </div>
+      </div>
+
+      {/* Available Payment Instruments */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+         <div className="bg-surface p-6 rounded-lg border border-gray-200 shadow-sm flex items-center gap-4">
+            <div className="p-3 bg-gray-100 rounded text-gray-600"><Landmark size={24}/></div>
+            <div>
+               <h4 className="font-bold text-primary">Corporate Treasury</h4>
+               <p className="text-xs text-gray-500">Connected: JPMorgan Chase</p>
+            </div>
+         </div>
+         <div className="bg-surface p-6 rounded-lg border border-accent/30 shadow-sm flex items-center gap-4 relative overflow-hidden">
+             <div className="absolute right-0 top-0 bg-accent text-primary text-[10px] font-bold px-2 py-0.5 rounded-bl">RECOMMENDED</div>
+            <div className="p-3 bg-accent/10 rounded text-accent"><ShieldCheck size={24}/></div>
+            <div>
+               <h4 className="font-bold text-primary">AI Escrow Vault</h4>
+               <p className="text-xs text-gray-500">0.5% Fee • Instant Release</p>
+            </div>
+         </div>
+         <div className="bg-surface p-6 rounded-lg border border-gray-200 shadow-sm flex items-center gap-4">
+            <div className="p-3 bg-blue-50 rounded text-blue-600"><Coins size={24}/></div>
+            <div>
+               <h4 className="font-bold text-primary">USDC Settlement</h4>
+               <p className="text-xs text-gray-500">0% FX Fee • Global</p>
+            </div>
+         </div>
       </div>
 
       {/* Transactions */}
@@ -75,7 +101,7 @@ export const WalletView: React.FC = () => {
             <tr>
               <th className="px-8 py-4 text-left">Type</th>
               <th className="px-8 py-4 text-left">Counterparty</th>
-              <th className="px-8 py-4 text-left">Date</th>
+              <th className="px-8 py-4 text-left">Method</th>
               <th className="px-8 py-4 text-left">Status</th>
               <th className="px-8 py-4 text-right">Amount</th>
             </tr>
@@ -89,7 +115,11 @@ export const WalletView: React.FC = () => {
                   </span>
                 </td>
                 <td className="px-8 py-5 font-serif font-medium text-primary text-lg">{tx.to || tx.from}</td>
-                <td className="px-8 py-5 text-gray-500 text-sm font-sans">{tx.date}</td>
+                <td className="px-8 py-5 text-gray-500 text-sm font-sans flex items-center gap-2">
+                   {tx.method === 'USDC' && <Coins size={14} className="text-blue-500"/>}
+                   {tx.method === 'Smart Contract' && <ShieldCheck size={14} className="text-accent"/>}
+                   {tx.method}
+                </td>
                 <td className="px-8 py-5">
                    <div className="flex items-center gap-2">
                      <div className={`w-2 h-2 rounded-full ${tx.status === 'Completed' ? 'bg-success shadow-[0_0_6px_rgba(46,125,50,0.4)]' : 'bg-accent shadow-[0_0_6px_rgba(212,175,55,0.4)]'}`}></div>
