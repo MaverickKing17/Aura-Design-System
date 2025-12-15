@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
 import { UploadSpecs } from './components/UploadSpecs';
@@ -6,25 +6,40 @@ import { ResultsView } from './components/ResultsView';
 import { CommitmentView } from './components/CommitmentView';
 import { SuccessView } from './components/SuccessView';
 import { LoginView } from './components/LoginView';
+import { Loading } from './components/Loading';
 // Import New Dashboard Views
 import { WalletView, AnalyticsView, OrdersView, SuppliersView, SettingsView } from './components/DashboardViews';
 // Import Info/Footer Views
 import { SecurityView, Web3PolicyView, PrivacyView, TermsView, HelpCenterView, SupportView, SettlementSwiftView, SettlementTreasuryView, SettlementLocView, SettlementEscrowView } from './components/InfoViews';
 
 import { AppScreen, Material } from './types';
-import { MOCK_MATERIALS } from './constants';
-import { MessageCircle, Shield, FileText, HelpCircle, Lock, Landmark, Briefcase, Globe, FileCheck } from 'lucide-react';
+import { MessageCircle, Shield, HelpCircle, Lock, Landmark, Briefcase, Globe, FileCheck } from 'lucide-react';
 
 const App: React.FC = () => {
-  // Authentication State
+  // Authentication & Loading State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(AppScreen.DASHBOARD);
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
 
+  // Reference for scrolling the main content area
+  const mainContentRef = useRef<HTMLDivElement>(null);
+
   const handleNavigate = (screen: AppScreen) => {
-    setCurrentScreen(screen);
-    window.scrollTo(0, 0);
+    // Trigger Branded Loading State
+    setIsLoading(true);
+    
+    // Simulate data fetch / route transition delay
+    setTimeout(() => {
+        setCurrentScreen(screen);
+        setIsLoading(false);
+        
+        // Scroll to top of the main content area
+        if (mainContentRef.current) {
+            mainContentRef.current.scrollTop = 0;
+        }
+    }, 800);
   };
 
   const handleProceedToResults = () => {
@@ -108,16 +123,22 @@ const App: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-[#FAF8F5] font-sans text-primary">
+      {isLoading && <Loading />}
+      
       <Sidebar currentScreen={currentScreen} onNavigate={handleNavigate} />
-      <main className="ml-64 flex-1 h-screen overflow-y-auto flex flex-col">
+      
+      <main 
+        ref={mainContentRef}
+        className="ml-64 flex-1 h-screen overflow-y-auto flex flex-col scroll-smooth"
+      >
         <div className="flex-1 p-12">
           <div className="max-w-7xl mx-auto">
             {renderContent()}
           </div>
         </div>
         
-        {/* Main Application Footer - Dark Premium Theme */}
-        <footer className="bg-primary border-t border-[#2C3E50] py-16 px-12 shrink-0 relative z-10 text-white">
+        {/* Global Footer - Present on ALL views */}
+        <footer className="bg-primary border-t border-[#2C3E50] py-16 px-12 shrink-0 relative z-10 text-white mt-auto">
           {/* Top decorative glow */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent to-transparent opacity-40"></div>
 
@@ -132,7 +153,7 @@ const App: React.FC = () => {
                     Classic Homes <span className="text-accent font-light">Marketplace</span>
                   </h2>
                   
-                  {/* Unified Legal Links Bar - Fixed Wrapping Issues */}
+                  {/* Unified Legal Links Bar */}
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-400 font-medium">
                     <span className="text-gray-500">© 2025 All Rights Reserved</span>
                     <span className="text-gray-700 hidden sm:inline">|</span>
@@ -173,13 +194,12 @@ const App: React.FC = () => {
 
             <div className="h-px bg-white/10 w-full mb-10"></div>
 
-            {/* Bottom Row: Corporate Settlement Methods - Interactive & Professional Font */}
+            {/* Bottom Row: Corporate Settlement Methods */}
             <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
                 <div className="flex items-center gap-3 text-xs text-gray-500 uppercase tracking-widest font-bold font-sans">
                    <Lock size={14} className="text-accent" /> Institutional Settlement Channels
                 </div>
                 
-                {/* Updated Font Stack - Clean Sans (Inter) */}
                 <div className="flex flex-wrap justify-center sm:justify-end gap-x-8 gap-y-4 font-sans">
                    <button 
                      onClick={() => handleNavigate(AppScreen.SETTLEMENT_SWIFT)}
