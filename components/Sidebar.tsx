@@ -23,11 +23,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentScreen, onNavigate }) =
     { icon: LayoutDashboard, label: 'Dashboard', screen: AppScreen.DASHBOARD },
     { icon: FolderOpen, label: 'Projects', screen: AppScreen.UPLOAD_SPECS },
     { icon: Box, label: 'Materials', screen: AppScreen.RESULTS },
-    { icon: ShoppingBag, label: 'Orders', screen: null },
-    { icon: Wallet, label: 'Wallet', screen: null },
-    { icon: BarChart3, label: 'Analytics', screen: null },
-    { icon: ShieldCheck, label: 'Vetted Suppliers', screen: null },
-    { icon: Settings, label: 'Settings', screen: null },
+    { icon: ShoppingBag, label: 'Orders', screen: AppScreen.ORDERS },
+    { icon: Wallet, label: 'Wallet', screen: AppScreen.WALLET },
+    { icon: BarChart3, label: 'Analytics', screen: AppScreen.ANALYTICS },
+    { icon: ShieldCheck, label: 'Vetted Suppliers', screen: AppScreen.SUPPLIERS },
+    { icon: Settings, label: 'Settings', screen: AppScreen.SETTINGS },
   ];
 
   return (
