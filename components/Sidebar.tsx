@@ -6,7 +6,10 @@ import {
   Settings, 
   Bell, 
   LogOut,
-  ShieldCheck
+  ShieldCheck,
+  ShoppingBag,
+  Wallet,
+  BarChart3
 } from 'lucide-react';
 import { AppScreen } from '../types';
 
@@ -20,14 +23,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentScreen, onNavigate }) =
     { icon: LayoutDashboard, label: 'Dashboard', screen: AppScreen.DASHBOARD },
     { icon: FolderOpen, label: 'Projects', screen: AppScreen.UPLOAD_SPECS },
     { icon: Box, label: 'Materials', screen: AppScreen.RESULTS },
+    { icon: ShoppingBag, label: 'Orders', screen: null },
+    { icon: Wallet, label: 'Wallet', screen: null },
+    { icon: BarChart3, label: 'Analytics', screen: null },
     { icon: ShieldCheck, label: 'Vetted Suppliers', screen: null },
     { icon: Settings, label: 'Settings', screen: null },
   ];
 
   return (
-    <div className="w-64 h-screen bg-primary text-white flex flex-col fixed left-0 top-0 border-r border-[#2C3E50]">
+    <div className="w-64 h-screen bg-primary text-white flex flex-col fixed left-0 top-0 border-r border-[#2C3E50] shadow-2xl z-50">
       {/* Brand Logo Area */}
-      <div className="p-8 border-b border-[#2C3E50] flex flex-col items-center">
+      <div className="p-8 border-b border-[#2C3E50] flex flex-col items-center shrink-0">
         <div className="w-12 h-12 mb-4 text-accent">
            {/* Abstract House Logo */}
            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-full h-full">
@@ -42,28 +48,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentScreen, onNavigate }) =
         </h1>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 py-8 px-4 space-y-2">
+      {/* Navigation - Scrollable */}
+      <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
         {menuItems.map((item, index) => (
           <button
             key={index}
             onClick={() => item.screen && onNavigate(item.screen)}
-            className={`w-full flex items-center px-4 py-3 text-sm tracking-wide transition-colors duration-200 group
+            className={`w-full flex items-center px-4 py-3 text-sm tracking-wide transition-all duration-200 group rounded-lg
               ${currentScreen === item.screen 
-                ? 'bg-[#2C3E50] text-accent border-r-2 border-accent' 
-                : 'text-gray-300 hover:bg-[#2C3E50] hover:text-white'
+                ? 'bg-[#2C3E50] text-accent shadow-lg translate-x-1' 
+                : 'text-gray-400 hover:bg-[#2C3E50] hover:text-white hover:translate-x-1'
               }`}
           >
-            <item.icon size={20} className={`mr-3 ${currentScreen === item.screen ? 'text-accent' : 'text-gray-400 group-hover:text-white'}`} />
+            <item.icon size={18} className={`mr-3 ${currentScreen === item.screen ? 'text-accent' : 'text-gray-500 group-hover:text-white'}`} />
             {item.label}
           </button>
         ))}
       </nav>
 
-      {/* User & Footer */}
-      <div className="p-6 border-t border-[#2C3E50]">
+      {/* User Profile */}
+      <div className="p-6 border-t border-[#2C3E50] bg-[#15233a] shrink-0">
         <div className="flex items-center mb-6">
-          <div className="w-10 h-10 rounded-full bg-gray-600 border-2 border-accent overflow-hidden">
+          <div className="w-10 h-10 rounded-full bg-gray-600 border-2 border-accent overflow-hidden shadow-md">
             <img src="https://picsum.photos/100/100" alt="User" className="w-full h-full object-cover" />
           </div>
           <div className="ml-3">
@@ -72,8 +78,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentScreen, onNavigate }) =
           </div>
         </div>
         <div className="flex justify-between text-gray-400">
-          <button className="hover:text-white"><Bell size={18} /></button>
-          <button className="hover:text-white"><LogOut size={18} /></button>
+          <button className="hover:text-white transition-colors p-1 hover:bg-white/10 rounded"><Bell size={16} /></button>
+          <button className="hover:text-white transition-colors p-1 hover:bg-white/10 rounded"><LogOut size={16} /></button>
         </div>
       </div>
     </div>
