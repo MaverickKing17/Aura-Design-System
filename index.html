@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -20,6 +20,7 @@
               surface: '#FFFFFF', // Pure White
               success: '#2E7D32', // Success Green
               error: '#C62828', // Error Red
+              tertiary: '#F5F5F5', // Tertiary Gray for Borders
             },
             fontFamily: {
               serif: ['"Playfair Display"', 'serif'],
@@ -27,8 +28,11 @@
               mono: ['"JetBrains Mono"', 'monospace'],
             },
             boxShadow: {
-              'luxury': '0 4px 20px -2px rgba(26, 42, 68, 0.1)',
+              'luxury': '0 4px 20px -2px rgba(26, 42, 68, 0.08)',
             },
+            backgroundImage: {
+              'architectural-grid': "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm1 1h38v38H1V1z' fill='%231A2A44' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E\")",
+            }
           }
         }
       }
@@ -40,14 +44,14 @@
       }
       /* Custom Scrollbar for that premium feel */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
       ::-webkit-scrollbar-track {
         background: #f1f1f1; 
       }
       ::-webkit-scrollbar-thumb {
         background: #D4AF37; 
-        border-radius: 4px;
+        border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
         background: #b6922e; 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   CreditCard, Wallet, TrendingUp, ArrowUpRight, ArrowDownLeft, 
   Package, Truck, CheckCircle2, AlertCircle, Search, Star, ShieldCheck, 
-  User, Lock, Bell
+  User, Lock, Bell, Link as LinkIcon
 } from 'lucide-react';
 import { Button } from './Button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
@@ -256,30 +256,37 @@ export const SuppliersView: React.FC = () => {
   ];
 
   return (
-     <div className="animate-fade-in space-y-8">
-       <div className="flex justify-between items-end">
+     <div className="animate-fade-in space-y-8 relative">
+       {/* Background Grid Pattern */}
+       <div className="absolute inset-0 bg-architectural-grid opacity-30 pointer-events-none -z-10 h-full w-full"></div>
+
+       <div className="flex justify-between items-end border-b border-gray-200 pb-6">
          <div>
-           <h2 className="text-3xl font-serif text-primary mb-2">Vetted Global Network</h2>
-           <p className="text-gray-500">Only top 1% of suppliers meet our provenance standards.</p>
+           <h2 className="text-4xl font-serif text-primary mb-2">Vetted Global Network</h2>
+           <p className="text-gray-500 font-sans text-sm">ELITE PARTNER ECOSYSTEM &bull; <span className="text-accent">TOP 1% PROVENANCE CHECKED</span></p>
          </div>
          <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-            <input type="text" placeholder="Search suppliers..." className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-primary outline-none" />
+            <input type="text" placeholder="Search suppliers..." className="pl-10 pr-4 py-2 border border-gray-300 rounded focus:ring-1 focus:ring-primary outline-none font-sans" />
          </div>
        </div>
 
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
          {suppliers.map((s, i) => (
-           <div key={i} className="bg-surface p-6 rounded-xl shadow-luxury border border-gray-100 hover:-translate-y-1 transition-transform cursor-pointer group">
-              <div className="flex items-start justify-between mb-4">
+           <div key={i} className="bg-surface p-6 shadow-luxury border border-[#F5F5F5] hover:-translate-y-1 transition-transform cursor-pointer group relative overflow-hidden">
+              <div className="flex items-start justify-between mb-4 relative z-10">
                  <img src={s.image} alt={s.name} className="w-16 h-16 rounded-full object-cover border-2 border-gray-100 group-hover:border-accent transition-colors" />
-                 {s.verified && <ShieldCheck className="text-accent" size={20} />}
+                 {s.verified && (
+                    <div className="bg-white/90 backdrop-blur border border-accent/20 p-1.5 rounded-full shadow-sm text-accent" title="Verified on Chain">
+                       <LinkIcon size={16} />
+                    </div>
+                 )}
               </div>
-              <h3 className="font-bold text-lg text-primary mb-1">{s.name}</h3>
-              <p className="text-sm text-gray-500 mb-3">{s.location}</p>
+              <h3 className="font-serif font-bold text-lg text-primary mb-1">{s.name}</h3>
+              <p className="text-sm text-gray-500 mb-3 font-sans">{s.location}</p>
               
-              <div className="flex items-center justify-between text-sm">
-                 <span className="bg-gray-100 px-2 py-1 rounded text-gray-600 text-xs font-medium">{s.specialty}</span>
+              <div className="flex items-center justify-between text-sm mt-4 border-t border-gray-50 pt-4">
+                 <span className="bg-gray-50 px-2 py-1 rounded text-gray-600 text-[10px] font-bold uppercase tracking-wider">{s.specialty}</span>
                  <div className="flex items-center text-accent font-bold">
                     <Star size={12} className="fill-current mr-1" /> {s.rating}
                  </div>
