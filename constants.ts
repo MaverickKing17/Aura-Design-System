@@ -18,8 +18,8 @@ export const MOCK_MATERIALS: Material[] = [
     leadTimeWeeks: 8,
     verified: true,
     provenanceId: '0x7f3...9a2',
-    // Rich white marble with distinct gold/beige veining
-    imageUrl: 'https://images.unsplash.com/photo-1595846519845-68e298c2edd8?q=80&w=800&auto=format&fit=crop',
+    // Detailed texture showing white stone with warm golden/beige veining
+    imageUrl: 'https://images.unsplash.com/photo-1615800098779-1be32e60cca3?auto=format&fit=crop&q=80&w=800',
     supplier: 'Tuscany Stoneworks'
   },
   {
@@ -33,8 +33,8 @@ export const MOCK_MATERIALS: Material[] = [
     leadTimeWeeks: 12,
     verified: true,
     provenanceId: '0x8b4...2c1',
-    // Crisp white with bold, dramatic grey veining
-    imageUrl: 'https://images.unsplash.com/photo-1568283084337-14902179831d?q=80&w=800&auto=format&fit=crop',
+    // Pure white background with bold, dramatic dark grey veining
+    imageUrl: 'https://images.unsplash.com/photo-1605218427306-eea998d78908?auto=format&fit=crop&q=80&w=800',
     supplier: 'Apex Materials'
   },
   {
@@ -48,8 +48,8 @@ export const MOCK_MATERIALS: Material[] = [
     leadTimeWeeks: 6,
     verified: true,
     provenanceId: '0x1c9...5d4',
-    // Busy, brecciated grey and white pattern
-    imageUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop',
+    // High contrast, busy brecciated grey and white pattern
+    imageUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=800',
     supplier: 'Global Stone Imports'
   }
 ];

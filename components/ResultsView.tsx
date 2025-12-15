@@ -4,7 +4,7 @@ import { MOCK_MATERIALS } from '../constants';
 import { Button } from './Button';
 import { MaterialDetailsModal } from './MaterialDetailsModal';
 import { GenerateMaterialModal } from './GenerateMaterialModal';
-import { ShieldCheck, Info, ArrowRight, Eye, SlidersHorizontal, ArrowLeft, Sparkles, Loader2, RefreshCw, Plus, ArrowUpDown, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, Info, ArrowRight, Eye, SlidersHorizontal, ArrowLeft, Sparkles, Loader2, RefreshCw, Plus, ArrowUpDown, AlertTriangle, ImagePlus } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 interface ResultsViewProps {
@@ -52,7 +52,8 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
       const prompt = `Close-up, high-fidelity, photorealistic architectural texture photography of ${material.name} (${material.type}). 
       Origin: ${material.origin}. 
       Style: Luxury construction material sample, even lighting, sharp details, top-down view. 
-      The image should show the intricate details, veining, and texture of the material.`;
+      The image should show the intricate details, veining, and texture of the material.
+      If it is a natural stone, emphasize the natural variation and polish.`;
 
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
@@ -80,7 +81,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
 
     } catch (error) {
       console.error("Failed to generate image:", error);
-      // In a real app, we would show a toast notification here
+      alert("Unable to generate image at this time. Please try again.");
     } finally {
       // Remove from loading set
       setGeneratingIds(prev => {
@@ -147,7 +148,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
             <div key={material.id} className="bg-surface shadow-luxury flex flex-col h-full border border-gray-100 group transition-all duration-300 hover:-translate-y-1 relative">
               
               {/* Image Area */}
-              <div className="relative h-56 bg-gray-200 overflow-hidden group-hover:shadow-inner">
+              <div className="relative h-64 bg-gray-200 overflow-hidden group-hover:shadow-inner">
                  <img 
                     src={material.imageUrl} 
                     alt={material.name} 
@@ -161,46 +162,45 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
                    </div>
                  </div>
 
-                 {/* AI Gen Button (Only for existing materials or if you want to re-gen) */}
-                 {!isGenerated && (
-                   <div className="absolute top-4 left-4 z-10">
-                      <button
-                        onClick={(e) => handleGenerateImage(material, e)}
-                        disabled={isGenerating}
-                        className={`
-                          flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg backdrop-blur-md transition-all duration-300
-                          ${isGenerating 
-                            ? 'bg-accent/80 text-primary cursor-wait' 
-                            : 'bg-white/20 text-white border border-white/30 hover:bg-accent hover:text-primary hover:border-accent'
-                          }
-                        `}
-                      >
-                        {isGenerating ? (
-                          <>
-                            <Loader2 size={12} className="animate-spin" />
-                            Enhancing...
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles size={12} />
-                            AI Enhance
-                          </>
-                        )}
-                      </button>
-                   </div>
-                 )}
+                 {/* AI Gen Button - Now available for ALL materials */}
+                 <div className="absolute top-4 left-4 z-10">
+                    <button
+                      onClick={(e) => handleGenerateImage(material, e)}
+                      disabled={isGenerating}
+                      className={`
+                        flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg backdrop-blur-md transition-all duration-300
+                        ${isGenerating 
+                          ? 'bg-accent/90 text-primary cursor-wait' 
+                          : 'bg-white/20 text-white border border-white/30 hover:bg-accent hover:text-primary hover:border-accent'
+                        }
+                      `}
+                      title="Generate high-fidelity texture using AI"
+                    >
+                      {isGenerating ? (
+                        <>
+                          <Loader2 size={12} className="animate-spin" />
+                          Rendering...
+                        </>
+                      ) : (
+                        <>
+                          <ImagePlus size={12} />
+                          {isGenerated ? 'Regenerate' : 'Generate Texture'}
+                        </>
+                      )}
+                    </button>
+                 </div>
 
-                 {/* Generated Badge */}
+                 {/* Generated Badge (if it's a custom material) */}
                  {isGenerated && (
-                    <div className="absolute top-4 left-4 z-10">
-                        <span className="bg-accent text-primary px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-1">
-                            <Sparkles size={12} /> Custom Gen
+                    <div className="absolute bottom-4 left-4 z-10">
+                        <span className="bg-primary/80 backdrop-blur text-accent px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider shadow-lg flex items-center gap-1">
+                            <Sparkles size={10} /> AI Created
                         </span>
                     </div>
                  )}
 
                  {material.verified && (
-                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-12">
+                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-12 pointer-events-none">
                       <div className="flex items-center text-accent">
                          <ShieldCheck size={16} className="mr-2 fill-current" />
                          <span className="text-xs font-bold tracking-widest uppercase">Provenance Verified</span>
