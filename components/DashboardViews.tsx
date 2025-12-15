@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   CreditCard, Wallet, TrendingUp, ArrowUpRight, ArrowDownLeft, 
   Package, Truck, CheckCircle2, AlertCircle, Search, Star, ShieldCheck, 
-  User, Lock, Bell, Link as LinkIcon, BarChart3, Leaf, Factory, AlertTriangle, Activity
+  User, Lock, Bell, Link as LinkIcon, BarChart3, Leaf, Factory, AlertTriangle, Activity,
+  Filter, MoreHorizontal, Clock, FileText, CheckCircle
 } from 'lucide-react';
 import { Button } from './Button';
 import { 
@@ -272,63 +273,212 @@ export const AnalyticsView: React.FC = () => {
 
 // --- ORDERS VIEW ---
 export const OrdersView: React.FC = () => {
+  // Enhanced C-Suite data structure
   const orders = [
-     { id: 'ORD-8921', project: 'Sterling Residence', items: 'Calacatta Oro (120 sq ft)', date: 'Oct 24, 2025', status: 'Processing', total: '$48,250' },
-     { id: 'ORD-8920', project: 'Apex Tower', items: 'Structural Glass (4 Panes)', date: 'Oct 20, 2025', status: 'Shipped', total: '$12,400' },
-     { id: 'ORD-8815', project: 'Vanguard Estate', items: 'Teak Flooring (500 sq ft)', date: 'Oct 15, 2025', status: 'Delivered', total: '$35,000' },
+    {
+      id: 'ORD-2025-8921',
+      project: 'Sterling Residence',
+      supplier: 'Tuscany Stoneworks',
+      items: 'Calacatta Oro Marble (Bookmatched)',
+      qty: '120 sq ft',
+      date: 'Oct 24, 2025',
+      stage: 'Fabrication',
+      progress: 65,
+      paymentStatus: 'Escrow Locked',
+      risk: 'Low',
+      total: '$48,250.00',
+      nextMilestone: 'Quality Audit (Nov 02)'
+    },
+    {
+      id: 'ORD-2025-8920',
+      project: 'Apex Tower Penthouse',
+      supplier: 'Nordic Glass Solutions',
+      items: 'Structural Glazing Units',
+      qty: '4 Panes',
+      date: 'Oct 20, 2025',
+      stage: 'Intl. Logistics',
+      progress: 80,
+      paymentStatus: 'LC Released',
+      risk: 'Medium', // Customs delay
+      total: '$12,400.00',
+      nextMilestone: 'Customs Clearance (Oct 30)'
+    },
+    {
+      id: 'ORD-2025-8815',
+      project: 'Vanguard Estate',
+      supplier: 'Kyoto Timber Co.',
+      items: 'Reclaimed Teak Flooring',
+      qty: '500 sq ft',
+      date: 'Oct 15, 2025',
+      stage: 'Delivered',
+      progress: 100,
+      paymentStatus: 'Paid',
+      risk: 'None',
+      total: '$35,000.00',
+      nextMilestone: 'Installation'
+    },
+    {
+      id: 'ORD-2025-8742',
+      project: 'Sterling Residence',
+      supplier: 'Global Steel Works',
+      items: 'Architectural Bronze Trim',
+      qty: '200 linear ft',
+      date: 'Oct 12, 2025',
+      stage: 'Production Queue',
+      progress: 15,
+      paymentStatus: 'Deposit Paid',
+      risk: 'High', // Raw material shortage
+      total: '$18,500.00',
+      nextMilestone: 'Production Start (Nov 05)'
+    }
   ];
 
   return (
-    <div className="animate-fade-in space-y-8">
-      <h2 className="text-3xl font-serif text-primary">Order Management</h2>
-      
-      <div className="bg-surface rounded-xl shadow-sm border border-gray-200">
-         <div className="p-6 border-b border-gray-200">
-            <div className="flex gap-4">
-              <button className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium">Active Orders</button>
-              <button className="px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg text-sm font-medium">History</button>
-              <button className="px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg text-sm font-medium">Issues</button>
-            </div>
+    <div className="animate-fade-in space-y-8 relative">
+       {/* Background Pattern */}
+       <div className="absolute inset-0 bg-architectural-grid opacity-30 pointer-events-none -z-10 h-full w-full"></div>
+
+       <div className="flex justify-between items-end border-b border-gray-200 pb-6">
+         <div>
+           <h2 className="text-4xl font-serif text-primary mb-2">Order Management</h2>
+           <p className="text-gray-500 font-sans text-sm tracking-wide">
+             ACTIVE PIPELINE &bull; <span className="text-accent font-medium">LIFECYCLE TRACKING</span>
+           </p>
          </div>
+         <div className="flex gap-4">
+            <div className="relative">
+               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+               <input type="text" placeholder="Search orders, contracts..." className="pl-10 pr-4 py-2 border border-gray-300 rounded focus:ring-1 focus:ring-primary outline-none font-sans min-w-[250px]" />
+            </div>
+            <Button variant="outline" size="sm" icon={<Filter size={16}/>}>Filter View</Button>
+            <Button variant="primary" size="sm" icon={<FileText size={16}/>}>Export Report</Button>
+         </div>
+       </div>
+
+       {/* Executive Summary Metrics */}
+       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-surface p-6 rounded-lg shadow-luxury border border-[#F5F5F5] flex items-center justify-between">
+             <div>
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Active Volume</p>
+                <h3 className="text-2xl font-mono font-bold text-primary">$114,150.00</h3>
+                <p className="text-xs text-gray-500 mt-1">Across 4 active pipelines</p>
+             </div>
+             <div className="p-3 bg-blue-50 rounded-full text-blue-600">
+                <Package size={24} />
+             </div>
+          </div>
+          <div className="bg-surface p-6 rounded-lg shadow-luxury border border-[#F5F5F5] flex items-center justify-between">
+             <div>
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Supply Chain Health</p>
+                <h3 className="text-2xl font-mono font-bold text-success">92%</h3>
+                <p className="text-xs text-gray-500 mt-1">On-time delivery rate</p>
+             </div>
+             <div className="p-3 bg-green-50 rounded-full text-success">
+                <Activity size={24} />
+             </div>
+          </div>
+          <div className="bg-surface p-6 rounded-lg shadow-luxury border border-[#F5F5F5] flex items-center justify-between">
+             <div>
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Critical Actions</p>
+                <h3 className="text-2xl font-mono font-bold text-accent">2 Pending</h3>
+                <p className="text-xs text-gray-500 mt-1">1 Risk Flag, 1 Quality Audit</p>
+             </div>
+             <div className="p-3 bg-yellow-50 rounded-full text-accent">
+                <AlertTriangle size={24} />
+             </div>
+          </div>
+       </div>
+      
+      <div className="bg-surface rounded-xl shadow-luxury border border-gray-200 overflow-hidden">
          <div className="overflow-x-auto">
            <table className="w-full">
-             <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider">
+             <thead className="bg-gray-50 text-[11px] text-gray-500 uppercase tracking-widest font-bold border-b border-gray-200">
                <tr>
-                 <th className="px-6 py-4 text-left">Order ID</th>
-                 <th className="px-6 py-4 text-left">Project</th>
-                 <th className="px-6 py-4 text-left">Items</th>
-                 <th className="px-6 py-4 text-left">Date</th>
-                 <th className="px-6 py-4 text-left">Status</th>
-                 <th className="px-6 py-4 text-right">Total</th>
+                 <th className="px-6 py-4 text-left">Order & Project</th>
+                 <th className="px-6 py-4 text-left">Supplier & Items</th>
+                 <th className="px-6 py-4 text-left">Lifecycle Stage</th>
+                 <th className="px-6 py-4 text-left">Financial Status</th>
+                 <th className="px-6 py-4 text-left">Risk Assessment</th>
+                 <th className="px-6 py-4 text-right">Total Value</th>
                  <th className="px-6 py-4 text-center">Action</th>
                </tr>
              </thead>
              <tbody className="divide-y divide-gray-100">
                {orders.map(order => (
-                 <tr key={order.id} className="hover:bg-gray-50/50">
-                   <td className="px-6 py-4 font-mono text-primary font-medium">{order.id}</td>
-                   <td className="px-6 py-4 text-gray-700">{order.project}</td>
-                   <td className="px-6 py-4 text-sm text-gray-500">{order.items}</td>
-                   <td className="px-6 py-4 text-sm text-gray-500">{order.date}</td>
-                   <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border
-                        ${order.status === 'Processing' ? 'bg-blue-50 text-blue-700 border-blue-100' : 
-                          order.status === 'Shipped' ? 'bg-yellow-50 text-yellow-700 border-yellow-100' :
-                          'bg-green-50 text-green-700 border-green-100'}`}>
-                         {order.status === 'Processing' && <Package size={12} className="mr-1"/>}
-                         {order.status === 'Shipped' && <Truck size={12} className="mr-1"/>}
-                         {order.status === 'Delivered' && <CheckCircle2 size={12} className="mr-1"/>}
-                         {order.status}
+                 <tr key={order.id} className="hover:bg-gray-50/50 transition-colors group">
+                   <td className="px-6 py-5">
+                      <div className="font-mono text-primary font-bold text-sm mb-1">{order.id}</div>
+                      <div className="text-xs text-gray-500 font-medium">{order.project}</div>
+                   </td>
+                   <td className="px-6 py-5">
+                      <div className="flex items-center gap-2 mb-1">
+                         <Factory size={12} className="text-gray-400" />
+                         <span className="text-sm font-bold text-gray-700">{order.supplier}</span>
+                      </div>
+                      <div className="text-xs text-gray-500">{order.items}</div>
+                   </td>
+                   <td className="px-6 py-5 min-w-[200px]">
+                      <div className="flex justify-between items-end mb-1">
+                         <span className="text-xs font-bold text-primary">{order.stage}</span>
+                         <span className="text-[10px] text-gray-400">{order.progress}%</span>
+                      </div>
+                      <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                         <div 
+                            className={`h-full rounded-full ${order.progress === 100 ? 'bg-success' : 'bg-primary'}`} 
+                            style={{width: `${order.progress}%`}}
+                         ></div>
+                      </div>
+                      <div className="mt-1 flex items-center gap-1 text-[10px] text-gray-400">
+                         <Clock size={10} /> Next: {order.nextMilestone}
+                      </div>
+                   </td>
+                   <td className="px-6 py-5">
+                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-bold uppercase tracking-wide border
+                        ${order.paymentStatus.includes('Paid') ? 'bg-green-50 text-green-700 border-green-100' : 
+                          order.paymentStatus.includes('Escrow') ? 'bg-blue-50 text-blue-700 border-blue-100' :
+                          'bg-gray-50 text-gray-600 border-gray-200'}`}>
+                         {order.paymentStatus}
                       </span>
                    </td>
-                   <td className="px-6 py-4 text-right font-medium text-primary">{order.total}</td>
-                   <td className="px-6 py-4 text-center">
-                      <Button variant="text" size="sm">Details</Button>
+                   <td className="px-6 py-5">
+                      {order.risk === 'High' && (
+                         <div className="flex items-center text-error text-xs font-bold uppercase tracking-wide">
+                            <AlertTriangle size={14} className="mr-1" /> High Risk
+                         </div>
+                      )}
+                      {order.risk === 'Medium' && (
+                         <div className="flex items-center text-accent text-xs font-bold uppercase tracking-wide">
+                            <AlertCircle size={14} className="mr-1" /> Medium Risk
+                         </div>
+                      )}
+                      {order.risk === 'Low' && (
+                         <div className="flex items-center text-blue-600 text-xs font-bold uppercase tracking-wide">
+                            <Activity size={14} className="mr-1" /> Low Risk
+                         </div>
+                      )}
+                      {(order.risk === 'None' || !order.risk) && (
+                         <div className="flex items-center text-gray-400 text-xs font-bold uppercase tracking-wide">
+                            <CheckCircle size={14} className="mr-1" /> Stable
+                         </div>
+                      )}
+                   </td>
+                   <td className="px-6 py-5 text-right font-mono font-bold text-primary text-base">{order.total}</td>
+                   <td className="px-6 py-5 text-center">
+                      <button className="text-gray-400 hover:text-primary transition-colors">
+                         <MoreHorizontal size={20} />
+                      </button>
                    </td>
                  </tr>
                ))}
              </tbody>
            </table>
+         </div>
+         <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-between items-center text-xs text-gray-500">
+            <span>Showing 4 of 12 active orders</span>
+            <div className="flex gap-2">
+               <button className="px-3 py-1 bg-white border border-gray-200 rounded hover:bg-gray-50 disabled:opacity-50">Previous</button>
+               <button className="px-3 py-1 bg-white border border-gray-200 rounded hover:bg-gray-50">Next</button>
+            </div>
          </div>
       </div>
     </div>
