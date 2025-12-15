@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { AppScreen } from '../types';
 import { MOCK_PROJECTS, SUPPLY_RISK_DATA } from '../constants';
 import { Button } from './Button';
-import { Plus, TrendingUp, TrendingDown, ArrowUpRight, ShieldCheck, Clock, MapPin, AlertTriangle, Globe } from 'lucide-react';
+import { Plus, TrendingUp, TrendingDown, ArrowUpRight, ShieldCheck, Clock, MapPin, AlertTriangle, Globe, Activity } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip, LineChart, Line, CartesianGrid, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from 'recharts';
 
 interface DashboardProps {
@@ -128,13 +128,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         </div>
 
         {/* Card 3: Global Supply Risk Radar */}
-        <div className="bg-surface p-6 shadow-luxury border border-tertiary relative flex flex-col justify-between">
+        <div className="bg-surface p-6 shadow-luxury border border-tertiary relative flex flex-col">
            <div className="flex justify-between items-start mb-4">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Global Supply Risk Radar</h3>
-              <Globe className="text-gray-300" size={16} />
+              <Activity className="text-gray-300" size={16} />
            </div>
            
-           <div className="h-40 w-full relative">
+           {/* Radar Chart */}
+           <div className="h-40 w-full relative mb-4">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart cx="50%" cy="50%" outerRadius="70%" data={SUPPLY_RISK_DATA.risk_radar_data}>
                   <PolarGrid stroke="#e5e7eb" />
@@ -162,6 +163,34 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                 </RadarChart>
               </ResponsiveContainer>
            </div>
+
+           {/* Risk List Component */}
+           <div className="flex-1 overflow-y-auto pr-1 space-y-2 custom-scrollbar max-h-40">
+              {SUPPLY_RISK_DATA.risk_radar_data.map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-100 hover:bg-gray-100 transition-colors">
+                  <div className="flex flex-col">
+                    <span className="text-xs font-bold text-primary">{item.material}</span>
+                    <span className="text-[10px] text-gray-500">{item.lead_time_days} days lead</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div 
+                      className={`w-2 h-2 rounded-full mr-2 ${
+                        item.supply_volatility_score > 70 ? 'bg-error animate-pulse' : 
+                        item.supply_volatility_score > 40 ? 'bg-accent' : 
+                        'bg-success'
+                      }`}
+                    ></div>
+                    <span className={`text-[10px] font-bold ${
+                         item.supply_volatility_score > 70 ? 'text-error' : 
+                         item.supply_volatility_score > 40 ? 'text-accent' : 
+                         'text-success'
+                      }`}>
+                       {item.supply_volatility_score}/100
+                    </span>
+                  </div>
+                </div>
+              ))}
+           </div>
         </div>
       </div>
 
@@ -178,8 +207,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                     <p className="text-xs text-gray-500 font-sans mt-1">AI-Predicted Material Inflation (Next 2 Months)</p>
                  </div>
                  <div className="flex items-center gap-4 text-xs">
-                    <span className="flex items-center gap-1"><div className="w-3 h-0.5 bg-primary"></div> Baseline Index</span>
-                    <span className="flex items-center gap-1"><div className="w-3 h-0.5 bg-accent border-dashed border-t border-accent"></div> AI Forecast</span>
+                    <span className="flex items-center gap-1"><div className="w-3 h-0.5 bg-primary"></div> Actual</span>
+                    <span className="flex items-center gap-1"><div className="w-3 h-0.5 bg-accent border-dashed border-t border-accent"></div> Predicted</span>
                  </div>
               </div>
               <div className="h-64 w-full">
@@ -192,8 +221,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                           contentStyle={{ backgroundColor: '#fff', border: '1px solid #f0f0f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
                           itemStyle={{ fontSize: '12px', fontWeight: 500 }}
                        />
-                       <Line type="monotone" dataKey="baseline_cost_index" stroke="#1A2A44" strokeWidth={2} dot={{r: 4, fill: '#1A2A44'}} name="Baseline Index" />
-                       <Line type="monotone" dataKey="forecast_cost_index" stroke="#D4AF37" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Forecast Index" />
+                       <Line type="monotone" dataKey="baseline_cost_index" stroke="#1A2A44" strokeWidth={2} dot={{r: 4, fill: '#1A2A44'}} name="Actual Cost Index" />
+                       <Line type="monotone" dataKey="forecast_cost_index" stroke="#D4AF37" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Predicted Cost Index" />
                     </LineChart>
                  </ResponsiveContainer>
               </div>

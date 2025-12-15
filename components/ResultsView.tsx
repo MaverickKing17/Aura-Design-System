@@ -249,7 +249,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
                       onClick={() => onProceed(material)}
                       icon={<ArrowRight size={18} />}
                    >
-                      Select for Visualization
+                      Proceed to Visualization
                    </Button>
                    <Button 
                       variant="outline" 

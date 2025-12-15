@@ -31,9 +31,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentScreen, onNavigate }) =
   ];
 
   return (
-    <div className="w-64 h-screen bg-primary text-white flex flex-col fixed left-0 top-0 border-r border-[#2C3E50] shadow-2xl z-50">
+    <div className="w-64 h-screen bg-[#2C3E50] text-white flex flex-col fixed left-0 top-0 border-r border-[#1A2A44] shadow-2xl z-50">
       {/* Brand Logo Area */}
-      <div className="p-8 border-b border-[#2C3E50] flex flex-col items-center shrink-0">
+      <div className="p-8 border-b border-[#1A2A44] flex flex-col items-center shrink-0 bg-[#1A2A44]">
         <div className="w-12 h-12 mb-4 text-accent">
            {/* Abstract House Logo */}
            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-full h-full">
@@ -54,20 +54,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentScreen, onNavigate }) =
           <button
             key={index}
             onClick={() => item.screen && onNavigate(item.screen)}
-            className={`w-full flex items-center px-4 py-3 text-sm tracking-wide transition-all duration-200 group rounded-lg
+            className={`w-full flex items-center px-4 py-3 text-sm tracking-wide transition-all duration-200 group rounded-lg font-medium
               ${currentScreen === item.screen 
-                ? 'bg-[#2C3E50] text-accent shadow-lg translate-x-1' 
-                : 'text-gray-400 hover:bg-[#2C3E50] hover:text-white hover:translate-x-1'
+                ? 'bg-[#1A2A44] text-white shadow-lg translate-x-1 border-l-4 border-accent' 
+                : 'text-gray-300 hover:bg-[#1A2A44]/50 hover:text-white hover:translate-x-1'
               }`}
           >
-            <item.icon size={18} className={`mr-3 ${currentScreen === item.screen ? 'text-accent' : 'text-gray-500 group-hover:text-white'}`} />
+            <item.icon size={18} className={`mr-3 transition-colors ${currentScreen === item.screen ? 'text-accent' : 'text-gray-400 group-hover:text-white'}`} />
             {item.label}
           </button>
         ))}
       </nav>
 
       {/* User Profile */}
-      <div className="p-6 border-t border-[#2C3E50] bg-[#15233a] shrink-0">
+      <div className="p-6 border-t border-[#1A2A44] bg-[#243342] shrink-0">
         <div className="flex items-center mb-6">
           <div className="w-10 h-10 rounded-full bg-gray-600 border-2 border-accent overflow-hidden shadow-md">
             <img src="https://picsum.photos/100/100" alt="User" className="w-full h-full object-cover" />

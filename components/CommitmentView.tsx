@@ -251,7 +251,7 @@ export const CommitmentView: React.FC<CommitmentViewProps> = ({ material, onBack
                 onClick={handleExecute}
                 icon={processing ? undefined : <Lock size={20} />}
               >
-                {processing ? "Securing on Chain..." : `Execute ${paymentMethod === 'ach' ? 'Transfer' : paymentMethod === 'usdc' ? 'Payment' : 'Escrow'}`}
+                {processing ? "Securing on Chain..." : "Commence Immutable Settlement"}
               </Button>
               
               <div className="mt-4 flex items-center justify-center text-xs text-gray-400">
