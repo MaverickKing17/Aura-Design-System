@@ -10,13 +10,43 @@ interface MaterialDetailsModalProps {
   onSelect: (material: Material) => void;
 }
 
-const getStepIcon = (label: string) => {
+const getStepVisuals = (label: string) => {
   switch (label) {
-    case 'Extraction': return <Pickaxe size={14} className="text-gray-600" />;
-    case 'Fabrication': return <Factory size={14} className="text-gray-600" />;
-    case 'Quality Audit': return <ClipboardCheck size={14} className="text-gray-600" />;
-    case 'Logistics': return <Truck size={14} className="text-gray-600" />;
-    default: return <Circle size={14} className="text-gray-600" />;
+    case 'Extraction':
+      return { 
+        icon: <Pickaxe size={18} />, 
+        bg: 'bg-amber-50', 
+        text: 'text-amber-700', 
+        border: 'border-amber-200' 
+      };
+    case 'Fabrication':
+      return { 
+        icon: <Factory size={18} />, 
+        bg: 'bg-blue-50', 
+        text: 'text-blue-700', 
+        border: 'border-blue-200' 
+      };
+    case 'Quality Audit':
+      return { 
+        icon: <ClipboardCheck size={18} />, 
+        bg: 'bg-emerald-50', 
+        text: 'text-emerald-700', 
+        border: 'border-emerald-200' 
+      };
+    case 'Logistics':
+      return { 
+        icon: <Truck size={18} />, 
+        bg: 'bg-indigo-50', 
+        text: 'text-indigo-700', 
+        border: 'border-indigo-200' 
+      };
+    default:
+      return { 
+        icon: <Circle size={18} />, 
+        bg: 'bg-gray-50', 
+        text: 'text-gray-500', 
+        border: 'border-gray-200' 
+      };
   }
 };
 
@@ -90,35 +120,38 @@ export const MaterialDetailsModal: React.FC<MaterialDetailsModalProps> = ({ mate
           <div className="mb-8">
              <h3 className="text-lg font-bold text-primary mb-4 border-b border-gray-100 pb-2">Provenance History</h3>
              <div className="space-y-4 pl-2 border-l-2 border-gray-200 ml-2">
-                {PROVENANCE_STEPS.map((step) => (
-                  <div key={step.id} className="relative pl-8 pb-4">
-                     {/* Timeline connector and status dot */}
-                     <div className={`absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 bg-surface z-10 flex items-center justify-center ${step.verified ? 'border-success' : 'border-gray-300'}`}>
-                        {step.verified && <Check size={10} className="text-success" />}
-                     </div>
-                     
-                     {/* Step content with Icon */}
-                     <div className="flex items-start bg-gray-50 p-3 rounded-lg border border-gray-100">
-                        <div className="mr-3 mt-1 p-1.5 bg-white rounded shadow-sm border border-gray-100 text-gray-500">
-                           {getStepIcon(step.label)}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-primary">{step.label}</p>
-                          <p className="text-xs text-gray-500 font-medium">{step.entity}</p>
-                          <div className="flex gap-2 text-[10px] text-gray-400 mt-1">
-                            <span>{step.date}</span>
-                            <span>•</span>
-                            <span>{step.location}</span>
+                {PROVENANCE_STEPS.map((step) => {
+                  const visuals = getStepVisuals(step.label);
+                  return (
+                    <div key={step.id} className="relative pl-8 pb-4">
+                       {/* Timeline connector and status dot */}
+                       <div className={`absolute -left-[9px] top-4 w-4 h-4 rounded-full border-2 bg-surface z-10 flex items-center justify-center ${step.verified ? 'border-success' : 'border-gray-300'}`}>
+                          {step.verified && <Check size={10} className="text-success" />}
+                       </div>
+                       
+                       {/* Step content with Styled Icon */}
+                       <div className="flex items-center bg-white p-3 rounded-lg border border-gray-100 shadow-sm hover:border-gray-300 transition-colors">
+                          <div className={`mr-4 p-2.5 rounded-full border ${visuals.bg} ${visuals.border} ${visuals.text} flex items-center justify-center`}>
+                             {visuals.icon}
                           </div>
-                        </div>
-                     </div>
-                  </div>
-                ))}
+                          <div>
+                            <p className="text-sm font-bold text-primary">{step.label}</p>
+                            <p className="text-xs text-gray-500 font-medium">{step.entity}</p>
+                            <div className="flex gap-2 text-[10px] text-gray-400 mt-1">
+                              <span>{step.date}</span>
+                              <span>•</span>
+                              <span>{step.location}</span>
+                            </div>
+                          </div>
+                       </div>
+                    </div>
+                  );
+                })}
              </div>
-             <div className="mt-2 pt-2 border-t border-gray-100">
-               <p className="text-xs font-mono text-gray-400 flex items-center">
-                 <ShieldCheck size={12} className="mr-1" />
-                 Chain ID: {material.provenanceId}
+             <div className="mt-4 pt-4 border-t border-gray-100 bg-gray-50/50 p-3 rounded">
+               <p className="text-xs font-mono text-gray-500 flex items-center justify-center">
+                 <ShieldCheck size={14} className="mr-2 text-accent" />
+                 Blockchain Verification ID: <span className="text-primary ml-2 font-bold">{material.provenanceId}</span>
                </p>
              </div>
           </div>

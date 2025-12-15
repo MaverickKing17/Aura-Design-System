@@ -18,7 +18,8 @@ export const MOCK_MATERIALS: Material[] = [
     leadTimeWeeks: 8,
     verified: true,
     provenanceId: '0x7f3...9a2',
-    imageUrl: 'https://picsum.photos/400/300',
+    // Realistic white marble with gold veining
+    imageUrl: 'https://images.unsplash.com/photo-1615800098779-1be82877bbe1?q=80&w=800&auto=format&fit=crop',
     supplier: 'Tuscany Stoneworks'
   },
   {
@@ -32,7 +33,8 @@ export const MOCK_MATERIALS: Material[] = [
     leadTimeWeeks: 12,
     verified: true,
     provenanceId: '0x8b4...2c1',
-    imageUrl: 'https://picsum.photos/401/300',
+    // Clean white marble with distinct grey veins
+    imageUrl: 'https://images.unsplash.com/photo-1596429188177-802555547433?q=80&w=800&auto=format&fit=crop',
     supplier: 'Apex Materials'
   },
   {
@@ -46,7 +48,8 @@ export const MOCK_MATERIALS: Material[] = [
     leadTimeWeeks: 6,
     verified: true,
     provenanceId: '0x1c9...5d4',
-    imageUrl: 'https://picsum.photos/402/300',
+    // Brecciated marble texture
+    imageUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop',
     supplier: 'Global Stone Imports'
   }
 ];
