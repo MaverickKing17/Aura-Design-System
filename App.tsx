@@ -60,7 +60,7 @@ const App: React.FC = () => {
       case AppScreen.ORDERS:
         return <OrdersView />;
       case AppScreen.WALLET:
-        return <WalletView />;
+        return <WalletView onNavigate={handleNavigate} />;
       case AppScreen.ANALYTICS:
         return <AnalyticsView />;
       case AppScreen.SUPPLIERS:

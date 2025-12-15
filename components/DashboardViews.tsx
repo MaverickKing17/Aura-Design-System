@@ -10,9 +10,14 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, Line, ComposedChart, Legend, Area, AreaChart 
 } from 'recharts';
+import { AppScreen } from '../types';
 
 // --- WALLET VIEW ---
-export const WalletView: React.FC = () => {
+interface WalletViewProps {
+  onNavigate: (screen: AppScreen) => void;
+}
+
+export const WalletView: React.FC<WalletViewProps> = ({ onNavigate }) => {
   const transactions = [
     { id: 1, type: 'Payment', to: 'Tuscany Stoneworks', amount: '-$42,500.00', date: 'Today, 10:23 AM', status: 'Completed', method: 'USDC' },
     { id: 2, type: 'Deposit', from: 'Sterling Main Account', amount: '+$150,000.00', date: 'Yesterday', status: 'Completed', method: 'Wire' },
@@ -20,7 +25,7 @@ export const WalletView: React.FC = () => {
   ];
 
   return (
-    <div className="animate-fade-in space-y-8 relative">
+    <div className="animate-fade-in space-y-8 relative pb-12">
        {/* Background Pattern */}
        <div className="absolute inset-0 bg-architectural-grid opacity-30 pointer-events-none -z-10 h-full w-full"></div>
 
@@ -28,7 +33,7 @@ export const WalletView: React.FC = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Balance Card */}
-        <div className="bg-primary text-white p-10 rounded-xl shadow-luxury relative overflow-hidden border border-[#2C3E50]">
+        <div className="bg-primary text-white p-10 rounded-2xl shadow-luxury relative overflow-hidden border border-[#2C3E50]">
            <div className="absolute top-0 right-0 p-32 bg-accent/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
            <p className="text-gray-400 text-xs font-bold tracking-widest uppercase mb-2">Total Liquidity Position</p>
            <h3 className="text-5xl font-mono font-bold mb-8 tracking-tighter">$2,450,890.00</h3>
@@ -45,53 +50,85 @@ export const WalletView: React.FC = () => {
            </div>
         </div>
 
-        {/* Quick Actions - Updated for Web3 Context */}
+        {/* Quick Actions - Enhanced Visuals */}
         <div className="grid grid-cols-2 gap-6">
-           <button className="bg-surface border border-gray-200 p-6 rounded-xl hover:shadow-luxury hover:-translate-y-1 transition-all flex flex-col items-center justify-center gap-4 group">
-              <div className="bg-green-50 p-5 rounded-full group-hover:bg-green-100 transition-colors border border-green-100">
-                 <ArrowDownLeft className="text-success" size={28} />
+           {/* Deposit Capital Card */}
+           <div 
+             onClick={() => onNavigate(AppScreen.SETTLEMENT_SWIFT)}
+             className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 hover:border-primary/20 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center group relative overflow-hidden"
+           >
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="mb-6 p-5 rounded-full bg-green-50 text-green-600 group-hover:bg-green-100 group-hover:scale-110 transition-all duration-300 ring-4 ring-green-50/50">
+                 <ArrowDownLeft size={32} strokeWidth={1.5} />
               </div>
-              <span className="font-bold text-primary text-lg font-serif">Deposit Capital</span>
-              <span className="text-xs text-gray-400 uppercase tracking-wider">Wire / ACH / Crypto</span>
-           </button>
-           <button className="bg-surface border border-gray-200 p-6 rounded-xl hover:shadow-luxury hover:-translate-y-1 transition-all flex flex-col items-center justify-center gap-4 group">
-              <div className="bg-accent/10 p-5 rounded-full group-hover:bg-accent/20 transition-colors border border-accent/20">
-                 <ShieldCheck className="text-accent" size={28} />
+              <h3 className="text-xl font-serif text-primary mb-2 group-hover:text-green-800 transition-colors">Deposit Capital</h3>
+              <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">Wire / ACH / Crypto</p>
+           </div>
+
+           {/* Smart Contracts Card */}
+           <div 
+             onClick={() => onNavigate(AppScreen.SETTLEMENT_ESCROW)}
+             className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 hover:border-accent/30 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center group relative overflow-hidden"
+           >
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="mb-6 p-5 rounded-full bg-amber-50 text-accent group-hover:bg-amber-100 group-hover:scale-110 transition-all duration-300 ring-4 ring-amber-50/50">
+                 <ShieldCheck size={32} strokeWidth={1.5} />
               </div>
-              <span className="font-bold text-primary text-lg font-serif">Smart Contracts</span>
-              <span className="text-xs text-gray-400 uppercase tracking-wider">Manage Escrow</span>
-           </button>
+              <h3 className="text-xl font-serif text-primary mb-2 group-hover:text-accent transition-colors">Smart Contracts</h3>
+              <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">Manage Escrow</p>
+           </div>
         </div>
       </div>
 
-      {/* Available Payment Instruments */}
+      {/* Available Payment Instruments - Rectangular Cards */}
+      <h3 className="text-lg font-bold text-gray-400 uppercase tracking-widest mt-8 mb-4">Payment Methods</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-         <div className="bg-surface p-6 rounded-lg border border-gray-200 shadow-sm flex items-center gap-4">
-            <div className="p-3 bg-gray-100 rounded text-gray-600"><Landmark size={24}/></div>
+         {/* Corporate Treasury */}
+         <div 
+            onClick={() => onNavigate(AppScreen.SETTLEMENT_TREASURY)}
+            className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-xl hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex items-center gap-5 relative overflow-hidden"
+         >
+            <div className="p-4 bg-gray-50 rounded-lg text-gray-600 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <Landmark size={24} />
+            </div>
             <div>
-               <h4 className="font-bold text-primary">Corporate Treasury</h4>
-               <p className="text-xs text-gray-500">Connected: JPMorgan Chase</p>
+               <h4 className="font-bold text-primary text-lg group-hover:text-primary/80 transition-colors">Corporate Treasury</h4>
+               <p className="text-xs text-gray-500 mt-1">Connected: JPMorgan Chase</p>
             </div>
          </div>
-         <div className="bg-surface p-6 rounded-lg border border-accent/30 shadow-sm flex items-center gap-4 relative overflow-hidden">
-             <div className="absolute right-0 top-0 bg-accent text-primary text-[10px] font-bold px-2 py-0.5 rounded-bl">RECOMMENDED</div>
-            <div className="p-3 bg-accent/10 rounded text-accent"><ShieldCheck size={24}/></div>
+
+         {/* AI Escrow Vault */}
+         <div 
+            onClick={() => onNavigate(AppScreen.SETTLEMENT_ESCROW)}
+            className="bg-white p-6 rounded-xl border border-accent/30 shadow-sm hover:shadow-xl hover:border-accent hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex items-center gap-5 relative overflow-hidden"
+         >
+             <div className="absolute right-0 top-0 bg-accent text-primary text-[10px] font-bold px-3 py-1 rounded-bl shadow-sm z-10">RECOMMENDED</div>
+            <div className="p-4 bg-amber-50 rounded-lg text-accent group-hover:bg-accent group-hover:text-white transition-colors duration-300">
+                <ShieldCheck size={24} />
+            </div>
             <div>
-               <h4 className="font-bold text-primary">AI Escrow Vault</h4>
-               <p className="text-xs text-gray-500">0.5% Fee • Instant Release</p>
+               <h4 className="font-bold text-primary text-lg group-hover:text-accent transition-colors">AI Escrow Vault</h4>
+               <p className="text-xs text-gray-500 mt-1">0.5% Fee • Instant Release</p>
             </div>
          </div>
-         <div className="bg-surface p-6 rounded-lg border border-gray-200 shadow-sm flex items-center gap-4">
-            <div className="p-3 bg-blue-50 rounded text-blue-600"><Coins size={24}/></div>
+
+         {/* USDC Settlement */}
+         <div 
+            onClick={() => onNavigate(AppScreen.SETTLEMENT_ESCROW)}
+            className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-xl hover:border-blue-400 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex items-center gap-5 relative overflow-hidden"
+         >
+            <div className="p-4 bg-blue-50 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                <Coins size={24} />
+            </div>
             <div>
-               <h4 className="font-bold text-primary">USDC Settlement</h4>
-               <p className="text-xs text-gray-500">0% FX Fee • Global</p>
+               <h4 className="font-bold text-primary text-lg group-hover:text-blue-600 transition-colors">USDC Settlement</h4>
+               <p className="text-xs text-gray-500 mt-1">0% FX Fee • Global</p>
             </div>
          </div>
       </div>
 
       {/* Transactions */}
-      <div className="bg-surface rounded-xl shadow-luxury border border-[#F5F5F5] overflow-hidden">
+      <div className="bg-surface rounded-xl shadow-luxury border border-[#F5F5F5] overflow-hidden mt-8">
         <div className="p-6 border-b border-[#F5F5F5] flex justify-between items-center bg-gray-50/50">
            <h3 className="font-serif font-bold text-primary text-xl">Recent Ledger Activity</h3>
            <Button variant="text" size="sm">View Full Ledger</Button>
