@@ -2,7 +2,7 @@ import React from 'react';
 import { Material } from '../types';
 import { PROVENANCE_STEPS } from '../constants';
 import { Button } from './Button';
-import { X, ShieldCheck, MapPin, DollarSign, Clock, Factory, Check, Pickaxe, ClipboardCheck, Truck, Circle } from 'lucide-react';
+import { X, ShieldCheck, MapPin, DollarSign, Clock, Factory, Check, Pickaxe, ClipboardCheck, Truck, Circle, Layers } from 'lucide-react';
 
 interface MaterialDetailsModalProps {
   material: Material;
@@ -37,11 +37,11 @@ export const MaterialDetailsModal: React.FC<MaterialDetailsModalProps> = ({ mate
         </button>
 
         {/* Left / Top Image Section */}
-        <div className="w-full md:w-2/5 relative min-h-[300px] md:min-h-full bg-gray-100">
+        <div className="w-full md:w-2/5 relative min-h-[300px] md:min-h-full bg-gray-100 group">
            <img 
              src={material.imageUrl} 
              alt={material.name} 
-             className="absolute inset-0 w-full h-full object-cover"
+             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
            />
            <div className="absolute top-6 left-6">
               <span className="bg-accent text-primary px-3 py-1 text-sm font-bold uppercase tracking-wider shadow-md">
@@ -49,10 +49,12 @@ export const MaterialDetailsModal: React.FC<MaterialDetailsModalProps> = ({ mate
               </span>
            </div>
            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary/90 via-primary/60 to-transparent p-6 pt-24 text-white">
-              <div className="flex items-center gap-2 mb-2">
-                 <ShieldCheck className="text-accent" size={20} />
-                 <span className="font-mono text-sm tracking-widest uppercase text-accent">Verified Source</span>
-              </div>
+              {material.verified && (
+                <div className="flex items-center gap-2 mb-2">
+                   <ShieldCheck className="text-accent" size={20} />
+                   <span className="font-mono text-sm tracking-widest uppercase text-accent">Verified Source</span>
+                </div>
+              )}
               <p className="font-mono text-xs opacity-70">ID: {material.id.toUpperCase()}</p>
            </div>
         </div>
@@ -62,6 +64,7 @@ export const MaterialDetailsModal: React.FC<MaterialDetailsModalProps> = ({ mate
           <div className="mb-6">
             <h2 className="text-3xl font-serif text-primary mb-2">{material.name}</h2>
             <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+               <span className="flex items-center"><Layers size={16} className="mr-1 text-accent"/> {material.type}</span>
                <span className="flex items-center"><MapPin size={16} className="mr-1 text-accent"/> {material.origin}</span>
                <span className="flex items-center"><Factory size={16} className="mr-1 text-accent"/> {material.supplier}</span>
             </div>

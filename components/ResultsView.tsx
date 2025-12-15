@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AppScreen, Material } from '../types';
 import { MOCK_MATERIALS } from '../constants';
 import { Button } from './Button';
 import { MaterialDetailsModal } from './MaterialDetailsModal';
 import { GenerateMaterialModal } from './GenerateMaterialModal';
-import { ShieldCheck, Info, ArrowRight, Eye, SlidersHorizontal, ArrowLeft, Sparkles, Loader2, RefreshCw, Plus } from 'lucide-react';
+import { ShieldCheck, Info, ArrowRight, Eye, SlidersHorizontal, ArrowLeft, Sparkles, Loader2, RefreshCw, Plus, ArrowUpDown } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 interface ResultsViewProps {
@@ -16,11 +16,29 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
   const [filterType, setFilterType] = useState('All');
   const [viewingMaterial, setViewingMaterial] = useState<Material | null>(null);
   const [showGenerateModal, setShowGenerateModal] = useState(false);
+  const [sortBy, setSortBy] = useState('matchScore');
   
   // Local state for materials to allow updating images
   const [materials, setMaterials] = useState<Material[]>(MOCK_MATERIALS);
   // Track loading state by material ID
   const [generatingIds, setGeneratingIds] = useState<Set<string>>(new Set());
+
+  // Derived state for sorting
+  const sortedMaterials = useMemo(() => {
+    const sorted = [...materials];
+    switch (sortBy) {
+      case 'priceAsc':
+        return sorted.sort((a, b) => a.pricePerSqFt - b.pricePerSqFt);
+      case 'priceDesc':
+        return sorted.sort((a, b) => b.pricePerSqFt - a.pricePerSqFt);
+      case 'leadTimeAsc':
+        return sorted.sort((a, b) => a.leadTimeWeeks - b.leadTimeWeeks);
+      case 'matchScore':
+      default:
+        // Default to highest match score first
+        return sorted.sort((a, b) => b.matchScore - a.matchScore);
+    }
+  }, [materials, sortBy]);
 
   const handleGenerateImage = async (material: Material, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card click
@@ -91,6 +109,21 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
           </p>
         </div>
         <div className="flex gap-3 mt-4 md:mt-0">
+           {/* Sorting Dropdown */}
+           <div className="flex items-center gap-2 bg-white border border-gray-200 rounded px-3 py-2 shadow-sm h-[42px]">
+              <ArrowUpDown size={14} className="text-gray-400" />
+              <select 
+                className="bg-transparent text-sm font-medium text-gray-600 outline-none cursor-pointer pr-2"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="matchScore">Best Match</option>
+                <option value="priceAsc">Price: Low to High</option>
+                <option value="priceDesc">Price: High to Low</option>
+                <option value="leadTimeAsc">Lead Time: Fastest</option>
+              </select>
+           </div>
+
            <Button 
              variant="primary" 
              size="sm" 
@@ -105,7 +138,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
 
       {/* Results Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {materials.map((material, idx) => {
+        {sortedMaterials.map((material, idx) => {
           const isGenerating = generatingIds.has(material.id);
 
           return (
@@ -191,8 +224,8 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
                       Select for Visualization
                    </Button>
                    <Button 
-                      variant="text" 
-                      className="w-full text-sm text-gray-500"
+                      variant="outline" 
+                      className="w-full text-sm border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-primary hover:border-gray-300"
                       icon={<Eye size={16} />}
                       onClick={() => setViewingMaterial(material)}
                    >
