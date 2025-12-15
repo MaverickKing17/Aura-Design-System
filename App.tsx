@@ -138,10 +138,10 @@ const App: React.FC = () => {
                     </button>
                     <span className="text-gray-700 hidden sm:inline">|</span>
 
-                    <button onClick={() => handleNavigate(AppScreen.PRIVACY_POLICY)} className="hover:text-accent transition-colors whitespace-nowrap">Privacy</button>
+                    <button onClick={() => handleNavigate(AppScreen.PRIVACY_POLICY)} className="hover:text-accent transition-colors whitespace-nowrap">Privacy Policy</button>
                     <span className="text-gray-700 hidden sm:inline">|</span>
                     
-                    <button onClick={() => handleNavigate(AppScreen.TERMS_SERVICE)} className="hover:text-accent transition-colors whitespace-nowrap">Terms</button>
+                    <button onClick={() => handleNavigate(AppScreen.TERMS_SERVICE)} className="hover:text-accent transition-colors whitespace-nowrap">Terms of Service</button>
                   </div>
                </div>
 
