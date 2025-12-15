@@ -8,7 +8,7 @@ import { SuccessView } from './components/SuccessView';
 // Import New Dashboard Views
 import { WalletView, AnalyticsView, OrdersView, SuppliersView, SettingsView } from './components/DashboardViews';
 // Import Info/Footer Views
-import { SecurityView, Web3PolicyView, PrivacyView, TermsView, HelpCenterView, SupportView } from './components/InfoViews';
+import { SecurityView, Web3PolicyView, PrivacyView, TermsView, HelpCenterView, SupportView, SettlementSwiftView, SettlementTreasuryView, SettlementLocView, SettlementEscrowView } from './components/InfoViews';
 
 import { AppScreen, Material } from './types';
 import { MOCK_MATERIALS } from './constants';
@@ -81,6 +81,16 @@ const App: React.FC = () => {
         return <HelpCenterView />;
       case AppScreen.CONTACT_SUPPORT:
         return <SupportView />;
+
+      // Settlement Detail Pages
+      case AppScreen.SETTLEMENT_SWIFT:
+        return <SettlementSwiftView onBack={() => handleNavigate(AppScreen.DASHBOARD)}/>;
+      case AppScreen.SETTLEMENT_TREASURY:
+        return <SettlementTreasuryView onBack={() => handleNavigate(AppScreen.DASHBOARD)}/>;
+      case AppScreen.SETTLEMENT_LOC:
+        return <SettlementLocView onBack={() => handleNavigate(AppScreen.DASHBOARD)}/>;
+      case AppScreen.SETTLEMENT_ESCROW:
+        return <SettlementEscrowView onBack={() => handleNavigate(AppScreen.DASHBOARD)}/>;
         
       default:
         return <Dashboard onNavigate={handleNavigate} />;
@@ -108,23 +118,30 @@ const App: React.FC = () => {
             <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-10 mb-12">
                
                {/* Left: Branding & Legal */}
-               <div className="flex flex-col gap-4">
+               <div className="flex flex-col gap-4 max-w-2xl">
                   <h2 className="font-serif text-2xl tracking-wide text-white">
                     Classic Homes <span className="text-accent font-light">Marketplace</span>
                   </h2>
-                  <div className="flex flex-wrap gap-6 text-base text-gray-400 font-medium">
+                  
+                  {/* Unified Legal Links Bar - Fixed Wrapping Issues */}
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-400 font-medium">
                     <span className="text-gray-500">© 2025 All Rights Reserved</span>
-                    <span className="text-gray-600 hidden sm:inline">|</span>
-                    <button onClick={() => handleNavigate(AppScreen.SECURITY_POLICY)} className="hover:text-accent transition-colors flex items-center gap-2">
-                      <Shield size={16} className="text-accent/80" /> Security
+                    <span className="text-gray-700 hidden sm:inline">|</span>
+                    
+                    <button onClick={() => handleNavigate(AppScreen.SECURITY_POLICY)} className="hover:text-accent transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                      <Shield size={14} className="text-accent/80" /> Security
                     </button>
-                    <button onClick={() => handleNavigate(AppScreen.WEB3_POLICY)} className="hover:text-accent transition-colors flex items-center gap-2">
-                      <Lock size={16} className="text-accent/80" /> Provenance
+                    <span className="text-gray-700 hidden sm:inline">|</span>
+                    
+                    <button onClick={() => handleNavigate(AppScreen.WEB3_POLICY)} className="hover:text-accent transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                      <Lock size={14} className="text-accent/80" /> Provenance
                     </button>
-                    <span className="text-gray-600 hidden sm:inline">|</span>
-                    <button onClick={() => handleNavigate(AppScreen.PRIVACY_POLICY)} className="hover:text-accent transition-colors">Privacy</button>
-                    <span className="text-gray-600 hidden sm:inline">|</span>
-                    <button onClick={() => handleNavigate(AppScreen.TERMS_SERVICE)} className="hover:text-accent transition-colors">Terms</button>
+                    <span className="text-gray-700 hidden sm:inline">|</span>
+
+                    <button onClick={() => handleNavigate(AppScreen.PRIVACY_POLICY)} className="hover:text-accent transition-colors whitespace-nowrap">Privacy</button>
+                    <span className="text-gray-700 hidden sm:inline">|</span>
+                    
+                    <button onClick={() => handleNavigate(AppScreen.TERMS_SERVICE)} className="hover:text-accent transition-colors whitespace-nowrap">Terms</button>
                   </div>
                </div>
 
@@ -133,9 +150,6 @@ const App: React.FC = () => {
                   <div className="flex items-center gap-8 text-base text-gray-300 font-medium">
                      <button onClick={() => handleNavigate(AppScreen.HELP_CENTER)} className="hover:text-white transition-colors flex items-center gap-2 group">
                         <HelpCircle size={20} className="group-hover:text-accent transition-colors" /> Help Center
-                     </button>
-                     <button onClick={() => handleNavigate(AppScreen.CONTACT_SUPPORT)} className="hover:text-white transition-colors">
-                        Contact Support
                      </button>
                   </div>
                   <button 
@@ -150,28 +164,49 @@ const App: React.FC = () => {
 
             <div className="h-px bg-white/10 w-full mb-10"></div>
 
-            {/* Bottom Row: Corporate Settlement Methods */}
+            {/* Bottom Row: Corporate Settlement Methods - Interactive & Professional Font */}
             <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-                <div className="flex items-center gap-3 text-sm text-gray-400 uppercase tracking-widest font-bold">
+                <div className="flex items-center gap-3 text-xs text-gray-500 uppercase tracking-widest font-bold font-sans">
                    <Lock size={14} className="text-accent" /> Institutional Settlement Channels
                 </div>
-                <div className="flex items-center gap-8">
-                   <div className="flex items-center gap-2 text-gray-400 opacity-80 hover:opacity-100 hover:text-white transition-all cursor-default" title="SWIFT / SEPA Global Wire">
-                      <Globe size={18} className="text-accent"/> 
-                      <span className="font-serif text-sm tracking-wide">SWIFT / SEPA</span>
-                   </div>
-                   <div className="flex items-center gap-2 text-gray-400 opacity-80 hover:opacity-100 hover:text-white transition-all cursor-default" title="Corporate Treasury Account">
-                      <Landmark size={18} className="text-accent"/> 
-                      <span className="font-serif text-sm tracking-wide">Corporate Treasury</span>
-                   </div>
-                   <div className="flex items-center gap-2 text-gray-400 opacity-80 hover:opacity-100 hover:text-white transition-all cursor-default" title="Letter of Credit">
-                      <FileCheck size={18} className="text-accent"/> 
-                      <span className="font-serif text-sm tracking-wide">Letter of Credit</span>
-                   </div>
-                   <div className="flex items-center gap-2 text-gray-400 opacity-80 hover:opacity-100 hover:text-white transition-all cursor-default" title="USDC / On-Chain Settlement">
-                      <Briefcase size={18} className="text-accent"/> 
-                      <span className="font-serif text-sm tracking-wide">Escrow & Smart Contract</span>
-                   </div>
+                
+                {/* Updated Font Stack - Clean Sans (Inter) */}
+                <div className="flex flex-wrap justify-center sm:justify-end gap-x-8 gap-y-4 font-sans">
+                   <button 
+                     onClick={() => handleNavigate(AppScreen.SETTLEMENT_SWIFT)}
+                     className="flex items-center gap-2 text-gray-400 opacity-80 hover:opacity-100 hover:text-white transition-all group" 
+                     title="View SWIFT Details"
+                   >
+                      <Globe size={16} className="text-accent group-hover:scale-110 transition-transform"/> 
+                      <span className="text-sm font-medium tracking-tight">SWIFT / SEPA</span>
+                   </button>
+
+                   <button 
+                     onClick={() => handleNavigate(AppScreen.SETTLEMENT_TREASURY)}
+                     className="flex items-center gap-2 text-gray-400 opacity-80 hover:opacity-100 hover:text-white transition-all group" 
+                     title="View Treasury Details"
+                   >
+                      <Landmark size={16} className="text-accent group-hover:scale-110 transition-transform"/> 
+                      <span className="text-sm font-medium tracking-tight">Corporate Treasury</span>
+                   </button>
+
+                   <button 
+                     onClick={() => handleNavigate(AppScreen.SETTLEMENT_LOC)}
+                     className="flex items-center gap-2 text-gray-400 opacity-80 hover:opacity-100 hover:text-white transition-all group" 
+                     title="View Letter of Credit Details"
+                   >
+                      <FileCheck size={16} className="text-accent group-hover:scale-110 transition-transform"/> 
+                      <span className="text-sm font-medium tracking-tight">Letter of Credit</span>
+                   </button>
+
+                   <button 
+                     onClick={() => handleNavigate(AppScreen.SETTLEMENT_ESCROW)}
+                     className="flex items-center gap-2 text-gray-400 opacity-80 hover:opacity-100 hover:text-white transition-all group" 
+                     title="View Escrow Details"
+                   >
+                      <Briefcase size={16} className="text-accent group-hover:scale-110 transition-transform"/> 
+                      <span className="text-sm font-medium tracking-tight">Escrow & Smart Contract</span>
+                   </button>
                 </div>
             </div>
           </div>

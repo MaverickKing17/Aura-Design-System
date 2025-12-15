@@ -1,6 +1,152 @@
 import React from 'react';
-import { Shield, Lock, FileText, HelpCircle, Mail, MessageSquare, ChevronDown } from 'lucide-react';
+import { Shield, Lock, FileText, HelpCircle, Mail, MessageSquare, ChevronDown, Globe, Landmark, FileCheck, Briefcase, ArrowLeft } from 'lucide-react';
 import { Button } from './Button';
+import { AppScreen } from '../types';
+
+interface InfoViewProps {
+    onBack?: () => void;
+}
+
+// --- SETTLEMENT DETAIL VIEWS ---
+
+export const SettlementSwiftView: React.FC<InfoViewProps> = ({ onBack }) => (
+  <div className="animate-fade-in max-w-4xl mx-auto py-8">
+     {onBack && (
+        <button onClick={onBack} className="text-gray-400 hover:text-primary mb-6 flex items-center text-sm font-medium">
+           <ArrowLeft size={16} className="mr-1"/> Back to Dashboard
+        </button>
+     )}
+     <div className="flex items-center gap-4 mb-8">
+        <div className="p-4 bg-blue-50 rounded-full text-primary">
+           <Globe size={32} />
+        </div>
+        <div>
+           <h2 className="text-3xl font-serif text-primary">SWIFT / SEPA Global Wire</h2>
+           <p className="text-gray-500">ISO 20022 Compliant Messaging Standard</p>
+        </div>
+     </div>
+     
+     <div className="bg-surface border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
+        <p className="text-gray-600 leading-relaxed text-lg">
+           Classic Homes Marketplace supports direct high-value settlement via the SWIFT gpi (Global Payments Innovation) network. 
+           This ensures real-time tracking, fee transparency, and end-to-end security for cross-border procurement settlements exceeding $100k.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+           <div className="p-4 bg-gray-50 rounded border border-gray-100">
+              <h4 className="font-bold text-primary mb-2">Correspondent Banking</h4>
+              <p className="text-sm text-gray-500">Direct routing via JPMorgan Chase & Deutsche Bank clearing channels.</p>
+           </div>
+           <div className="p-4 bg-gray-50 rounded border border-gray-100">
+              <h4 className="font-bold text-primary mb-2">Settlement Time</h4>
+              <p className="text-sm text-gray-500">T+1 for Major Currencies (USD, EUR, GBP, JPY).</p>
+           </div>
+        </div>
+     </div>
+  </div>
+);
+
+export const SettlementTreasuryView: React.FC<InfoViewProps> = ({ onBack }) => (
+  <div className="animate-fade-in max-w-4xl mx-auto py-8">
+     {onBack && (
+        <button onClick={onBack} className="text-gray-400 hover:text-primary mb-6 flex items-center text-sm font-medium">
+           <ArrowLeft size={16} className="mr-1"/> Back to Dashboard
+        </button>
+     )}
+     <div className="flex items-center gap-4 mb-8">
+        <div className="p-4 bg-blue-50 rounded-full text-primary">
+           <Landmark size={32} />
+        </div>
+        <div>
+           <h2 className="text-3xl font-serif text-primary">Corporate Treasury Direct</h2>
+           <p className="text-gray-500">Centralized Liquidity Management</p>
+        </div>
+     </div>
+     
+     <div className="bg-surface border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
+        <p className="text-gray-600 leading-relaxed text-lg">
+           Link your SAP or Oracle ERP treasury modules directly to our platform via API. This allows for automated invoice reconciliation
+           and centralized liquidity management for multi-project procurement cycles.
+        </p>
+        <ul className="space-y-3 list-disc pl-5 text-gray-600">
+           <li>Real-time API integration with SAP S/4HANA and Oracle NetSuite.</li>
+           <li>Automated GL (General Ledger) coding for materials and logistics costs.</li>
+           <li>Consolidated monthly invoicing for enterprise accounts.</li>
+        </ul>
+     </div>
+  </div>
+);
+
+export const SettlementLocView: React.FC<InfoViewProps> = ({ onBack }) => (
+  <div className="animate-fade-in max-w-4xl mx-auto py-8">
+     {onBack && (
+        <button onClick={onBack} className="text-gray-400 hover:text-primary mb-6 flex items-center text-sm font-medium">
+           <ArrowLeft size={16} className="mr-1"/> Back to Dashboard
+        </button>
+     )}
+     <div className="flex items-center gap-4 mb-8">
+        <div className="p-4 bg-blue-50 rounded-full text-primary">
+           <FileCheck size={32} />
+        </div>
+        <div>
+           <h2 className="text-3xl font-serif text-primary">Documentary Letter of Credit (LC)</h2>
+           <p className="text-gray-500">UCP 600 Governed Trade Finance</p>
+        </div>
+     </div>
+     
+     <div className="bg-surface border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
+        <p className="text-gray-600 leading-relaxed text-lg">
+           For high-volume international shipments, we accept irrevocable confirmed Letters of Credit (LC) issued by rated financial institutions.
+           Our digital trade finance desk handles the presentation of compliant documents (Bill of Lading, Commercial Invoice, Packing List) to the advising bank.
+        </p>
+        <div className="p-4 bg-yellow-50 border border-yellow-100 rounded text-yellow-800 text-sm">
+           <strong>Note:</strong> L/C drafts must be approved by our trade finance department prior to issuance.
+        </div>
+     </div>
+  </div>
+);
+
+export const SettlementEscrowView: React.FC<InfoViewProps> = ({ onBack }) => (
+  <div className="animate-fade-in max-w-4xl mx-auto py-8">
+     {onBack && (
+        <button onClick={onBack} className="text-gray-400 hover:text-primary mb-6 flex items-center text-sm font-medium">
+           <ArrowLeft size={16} className="mr-1"/> Back to Dashboard
+        </button>
+     )}
+     <div className="flex items-center gap-4 mb-8">
+        <div className="p-4 bg-blue-50 rounded-full text-primary">
+           <Briefcase size={32} />
+        </div>
+        <div>
+           <h2 className="text-3xl font-serif text-primary">Smart Contract Escrow</h2>
+           <p className="text-gray-500">Programmable USDC & Fiat Settlement</p>
+        </div>
+     </div>
+     
+     <div className="bg-surface border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
+        <p className="text-gray-600 leading-relaxed text-lg">
+           Utilize our audited smart contract vaults for trustless escrow. Funds are locked on-chain (Polygon Network) and only released to the supplier
+           when physical logistics data (IoT sensors or Bill of Lading) confirms shipment or delivery.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            <div className="p-4 border border-gray-200 rounded">
+                <h3 className="font-bold text-primary">Locked</h3>
+                <p className="text-xs text-gray-500">Funds secured on order</p>
+            </div>
+            <div className="p-4 border border-gray-200 rounded">
+                <h3 className="font-bold text-primary">Verified</h3>
+                <p className="text-xs text-gray-500">Oracle confirms status</p>
+            </div>
+            <div className="p-4 border border-gray-200 rounded">
+                <h3 className="font-bold text-primary">Released</h3>
+                <p className="text-xs text-gray-500">Instant payout</p>
+            </div>
+        </div>
+     </div>
+  </div>
+);
+
+
+// --- EXISTING VIEWS ---
 
 // --- SECURITY POLICY ---
 export const SecurityView: React.FC = () => (
