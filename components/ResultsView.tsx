@@ -4,7 +4,7 @@ import { MOCK_MATERIALS } from '../constants';
 import { Button } from './Button';
 import { MaterialDetailsModal } from './MaterialDetailsModal';
 import { GenerateMaterialModal } from './GenerateMaterialModal';
-import { ShieldCheck, Info, ArrowRight, Eye, SlidersHorizontal, ArrowLeft, Sparkles, Loader2, RefreshCw, Plus, ArrowUpDown } from 'lucide-react';
+import { ShieldCheck, Info, ArrowRight, Eye, SlidersHorizontal, ArrowLeft, Sparkles, Loader2, RefreshCw, Plus, ArrowUpDown, AlertTriangle } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 interface ResultsViewProps {
@@ -197,11 +197,25 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ onBack, onProceed }) =
 
               {/* Content */}
               <div className="p-6 flex-1 flex flex-col">
-                <div className="flex justify-between items-start mb-2">
+                <div className="flex justify-between items-start mb-1">
                    <h3 className="text-xl font-serif text-primary">{material.name}</h3>
                    <span className="text-sm font-mono text-gray-500">{material.origin}</span>
                 </div>
-                <p className="text-sm text-gray-500 mb-4 font-medium">{material.supplier}</p>
+                
+                {/* Supplier & Verification Badge */}
+                <div className="flex items-center gap-2 mb-4">
+                   <p className="text-sm text-gray-500 font-medium">{material.supplier}</p>
+                   <span className="text-gray-300">|</span>
+                   {material.verified ? (
+                     <div className="flex items-center text-success text-xs font-bold uppercase tracking-wider" title={`Chain ID: ${material.provenanceId}`}>
+                        <ShieldCheck size={14} className="mr-1" /> Verified
+                     </div>
+                   ) : (
+                     <div className="flex items-center text-orange-500 text-xs font-bold uppercase tracking-wider">
+                        <AlertTriangle size={14} className="mr-1" /> Unverified
+                     </div>
+                   )}
+                </div>
                 
                 <div className="grid grid-cols-2 gap-4 mb-6 pt-4 border-t border-gray-100">
                   <div>
