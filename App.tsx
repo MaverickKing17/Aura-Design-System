@@ -5,6 +5,7 @@ import { UploadSpecs } from './components/UploadSpecs';
 import { ResultsView } from './components/ResultsView';
 import { CommitmentView } from './components/CommitmentView';
 import { SuccessView } from './components/SuccessView';
+import { LoginView } from './components/LoginView';
 // Import New Dashboard Views
 import { WalletView, AnalyticsView, OrdersView, SuppliersView, SettingsView } from './components/DashboardViews';
 // Import Info/Footer Views
@@ -15,6 +16,9 @@ import { MOCK_MATERIALS } from './constants';
 import { MessageCircle, Shield, FileText, HelpCircle, Lock, Landmark, Briefcase, Globe, FileCheck } from 'lucide-react';
 
 const App: React.FC = () => {
+  // Authentication State
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(AppScreen.DASHBOARD);
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
 
@@ -96,6 +100,11 @@ const App: React.FC = () => {
         return <Dashboard onNavigate={handleNavigate} />;
     }
   };
+
+  // Guard the application behind the LoginView
+  if (!isAuthenticated) {
+    return <LoginView onLogin={() => setIsAuthenticated(true)} />;
+  }
 
   return (
     <div className="flex min-h-screen bg-[#FAF8F5] font-sans text-primary">
