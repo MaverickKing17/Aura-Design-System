@@ -30,7 +30,7 @@ const App: React.FC = () => {
     // Trigger Branded Loading State
     setIsLoading(true);
     
-    // Simulate data fetch / route transition delay
+    // Simulate data fetch / route transition delay (1.5s as per UX standards)
     setTimeout(() => {
         setCurrentScreen(screen);
         setIsLoading(false);
@@ -39,7 +39,7 @@ const App: React.FC = () => {
         if (mainContentRef.current) {
             mainContentRef.current.scrollTop = 0;
         }
-    }, 800);
+    }, 1500);
   };
 
   const handleProceedToResults = () => {
