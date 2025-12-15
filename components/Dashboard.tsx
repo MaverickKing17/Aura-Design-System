@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { AppScreen } from '../types';
-import { MOCK_PROJECTS } from '../constants';
+import { MOCK_PROJECTS, SUPPLY_RISK_DATA } from '../constants';
 import { Button } from './Button';
 import { Plus, TrendingUp, TrendingDown, ArrowUpRight, ShieldCheck, Clock, MapPin, AlertTriangle, Globe } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip, LineChart, Line, CartesianGrid } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip, LineChart, Line, CartesianGrid, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from 'recharts';
 
 interface DashboardProps {
   onNavigate: (screen: AppScreen) => void;
@@ -26,17 +26,6 @@ const volumeData = [
   { month: 'Aug', value: 3.2 },
   { month: 'Sep', value: 3.8 },
   { month: 'Oct', value: 4.2 },
-];
-
-const forecastData = [
-  { name: 'May', actual: 400, predicted: 400 },
-  { name: 'Jun', actual: 420, predicted: 420 },
-  { name: 'Jul', actual: 410, predicted: 430 },
-  { name: 'Aug', actual: 450, predicted: 460 },
-  { name: 'Sep', actual: 480, predicted: 480 },
-  { name: 'Oct', actual: 520, predicted: 510 },
-  { name: 'Nov', actual: null, predicted: 540 },
-  { name: 'Dec', actual: null, predicted: 580 },
 ];
 
 export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
@@ -145,29 +134,33 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
               <Globe className="text-gray-300" size={16} />
            </div>
            
-           {/* Visual Radar Mockup */}
-           <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-dashed border-gray-100 pb-2">
-                 <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-success shadow-[0_0_8px_rgba(46,125,50,0.5)]"></div>
-                    <span className="text-sm font-medium text-primary">Tuscany, Italy</span>
-                 </div>
-                 <span className="text-[10px] font-mono text-gray-400">LOGISTICS: SECURE</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-dashed border-gray-100 pb-2">
-                 <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_rgba(212,175,55,0.5)] animate-pulse"></div>
-                    <span className="text-sm font-medium text-primary">São Paulo, Brazil</span>
-                 </div>
-                 <span className="text-[10px] font-mono text-accent">DELAY RISK: +2 WKS</span>
-              </div>
-              <div className="flex items-center justify-between">
-                 <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-success shadow-[0_0_8px_rgba(46,125,50,0.5)]"></div>
-                    <span className="text-sm font-medium text-primary">Vermont, USA</span>
-                 </div>
-                 <span className="text-[10px] font-mono text-gray-400">PRODUCTION: ON TRACK</span>
-              </div>
+           <div className="h-40 w-full relative">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={SUPPLY_RISK_DATA.risk_radar_data}>
+                  <PolarGrid stroke="#e5e7eb" />
+                  <PolarAngleAxis dataKey="material" tick={{ fontSize: 9, fill: '#6b7280' }} />
+                  <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                  <Radar
+                    name="Volatility"
+                    dataKey="supply_volatility_score"
+                    stroke="#D4AF37"
+                    strokeWidth={2}
+                    fill="#D4AF37"
+                    fillOpacity={0.3}
+                  />
+                  <Radar
+                    name="Geo-Risk"
+                    dataKey="geopolitical_risk_score"
+                    stroke="#1A2A44"
+                    strokeWidth={1}
+                    fill="#1A2A44"
+                    fillOpacity={0.1}
+                  />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #f0f0f0', fontSize: '12px' }}
+                  />
+                </RadarChart>
+              </ResponsiveContainer>
            </div>
         </div>
       </div>
@@ -185,22 +178,22 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                     <p className="text-xs text-gray-500 font-sans mt-1">AI-Predicted Material Inflation (Next 2 Months)</p>
                  </div>
                  <div className="flex items-center gap-4 text-xs">
-                    <span className="flex items-center gap-1"><div className="w-3 h-0.5 bg-primary"></div> Actual</span>
-                    <span className="flex items-center gap-1"><div className="w-3 h-0.5 bg-accent border-dashed border-t border-accent"></div> Predicted</span>
+                    <span className="flex items-center gap-1"><div className="w-3 h-0.5 bg-primary"></div> Baseline Index</span>
+                    <span className="flex items-center gap-1"><div className="w-3 h-0.5 bg-accent border-dashed border-t border-accent"></div> AI Forecast</span>
                  </div>
               </div>
               <div className="h-64 w-full">
                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={forecastData}>
+                    <LineChart data={SUPPLY_RISK_DATA.cost_forecast_data}>
                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#9CA3AF'}} dy={10} />
-                       <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#9CA3AF'}} />
+                       <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#9CA3AF'}} dy={10} />
+                       <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#9CA3AF'}} domain={[98, 105]} />
                        <Tooltip 
                           contentStyle={{ backgroundColor: '#fff', border: '1px solid #f0f0f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
                           itemStyle={{ fontSize: '12px', fontWeight: 500 }}
                        />
-                       <Line type="monotone" dataKey="actual" stroke="#1A2A44" strokeWidth={2} dot={{r: 4, fill: '#1A2A44'}} />
-                       <Line type="monotone" dataKey="predicted" stroke="#D4AF37" strokeWidth={2} strokeDasharray="5 5" dot={false} />
+                       <Line type="monotone" dataKey="baseline_cost_index" stroke="#1A2A44" strokeWidth={2} dot={{r: 4, fill: '#1A2A44'}} name="Baseline Index" />
+                       <Line type="monotone" dataKey="forecast_cost_index" stroke="#D4AF37" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Forecast Index" />
                     </LineChart>
                  </ResponsiveContainer>
               </div>
